@@ -2,8 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@grounded/schemas": ["packages/schemas"],
-      "@grounded/server/shared/*": ["packages/server/shared/*"]
+      "@launch-sequence/apps": ["packages/apps/*"],
+      "@launch-sequence/services": ["packages/services/*"],
+      "@launch-sequence/server": ["packages/server/*"],
+      "@launch-sequence/ui": ["packages/ui/*"],
+      "@launch-sequence/schemas": ["packages/schemas"]
     },
     "composite": true,
     "declaration": true,

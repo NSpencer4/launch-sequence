@@ -1,0 +1,26 @@
+{
+  "name": "@launch-sequence/server",
+  "version": "0.0.1",
+  "description": "Shared server utilities",
+  "type": "module",
+  "private": "true",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "exports": {
+    "./dynamo": "./dynamo/index.ts",
+    "./postgres": "./postgres/index.ts",
+    "./event-producer": "./event-producer/index.ts",
+    "./secrets-manager": "./secrets-manager/index.ts",
+    "./supabase": "./supabase/index.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.0.0",
+    "@supabase/supabase-js": "^2.39.0",
+    "drizzle-orm": "^0.45.1",
+    "kafkajs": "^2.2.4",
+    "pg": "^8.17.2"
+  }
+}
