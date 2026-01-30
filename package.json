@@ -1,0 +1,57 @@
+{
+  "name": "launch-sequence",
+  "version": "0.0.1",
+  "description": "",
+  "homepage": "https://github.com/NSpencer4/launch-sequence#readme",
+  "bugs": {
+    "url": "https://github.com/NSpencer4/launch-sequence/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NSpencer4/launch-sequence.git"
+  },
+  "type": "module",
+  "author": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "clean:deps": "lerna clean -y && rm -rf node_modules",
+    "clean:reinstall:deps": "npm run clean:deps && npm i",
+    "build": "lerna run build",
+    "lint": "lerna run lint",
+    "lint:fix": "lerna run lint:fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "workspaces": [],
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.0.9",
+    "@types/pg": "^8.16.0",
+    "@types/uuid": "^10.0.0",
+    "@typescript-eslint/utils": "^8.53.0",
+    "eslint": "^9.9.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "jest": "^30.2.0",
+    "lerna": "^9.0.3",
+    "prettier": "^3.8.0",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.3.0"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "drizzle-orm": "^0.45.1",
+    "env-var": "^7.5.0",
+    "pg": "^8.17.2",
+    "uuid": "^13.0.0",
+    "zod": "^3.24.2"
+  }
+}
