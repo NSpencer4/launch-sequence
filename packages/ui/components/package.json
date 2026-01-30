@@ -1,0 +1,37 @@
+{
+  "name": "@launch-sequence/ui",
+  "version": "0.0.1",
+  "description": "",
+  "private": "true",
+  "type": "module",
+  "scripts": {
+    "build": "storybook build",
+    "dev": "storybook dev -p 6006",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ..",
+    "lint.fix": "eslint .. --fix",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json"
+  },
+  "main": "build/index.js",
+  "module": "build/index.es.js",
+  "typings": "build/index.d.ts",
+  "files": [
+    "build"
+  ],
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "dependencies": {},
+  "devDependencies": {}
+}

@@ -1,8 +1,9 @@
 {
   "name": "launch-sequence",
   "version": "0.0.1",
-  "description": "",
+  "description": "The ultimate boolean manager",
   "homepage": "https://github.com/NSpencer4/launch-sequence#readme",
+  "private": "true",
   "bugs": {
     "url": "https://github.com/NSpencer4/launch-sequence/issues"
   },
@@ -17,8 +18,9 @@
     "doc": "docs"
   },
   "scripts": {
+    "audit:check": "yarn audit --audit-level=moderate --registry=https://registry.npmjs.org --production",
     "clean:deps": "lerna clean -y && rm -rf node_modules",
-    "clean:reinstall:deps": "yarn run clean:deps && yarn install",
+    "clean:reinstall:deps": "lerna run clean:deps && yarn install",
     "build": "lerna run build",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
@@ -26,40 +28,41 @@
     "format:check": "prettier --check .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "workspaces": [],
+  "workspaces": [
+    "packages/apps/*",
+    "packages/ui/*"
+  ],
   "devDependencies": {
     "@eslint/js": "^9.9.1",
-    "@remix-run/dev": "^2.17.4",
-    "@types/jest": "^30.0.0",
     "@types/node": "^25.0.9",
-    "@types/pg": "^8.16.0",
-    "@types/uuid": "^10.0.0",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
     "@typescript-eslint/utils": "^8.53.0",
+    "@vitejs/plugin-react": "^5.1.1",
     "eslint": "^9.9.1",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jsx-a11y": "^6.10.0",
     "eslint-plugin-prettier": "^5.5.5",
-    "jest": "^30.2.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "globals": "^15.9.0",
+    "jiti": "^2.4.0",
     "lerna": "^9.0.3",
+    "postcss": "^8.4.35",
     "prettier": "^3.8.0",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.3.0",
-    "vite": "^6.4.1"
+    "vite": "^6.4.1",
+    "vite-tsconfig-paths": "^6.0.4",
+    "vitest": "^4.0.18"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "engines": {
     "node": ">=22"
-  },
-  "dependencies": {
-    "@remix-run/node": "^2.17.4",
-    "@remix-run/react": "^2.17.4",
-    "@remix-run/serve": "^2.17.4",
-    "axios": "^1.13.2",
-    "drizzle-orm": "^0.45.1",
-    "env-var": "^7.5.0",
-    "isbot": "^4.4.0",
-    "pg": "^8.17.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "uuid": "^13.0.0",
-    "zod": "^3.24.2"
   }
 }

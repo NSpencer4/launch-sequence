@@ -1,36 +1,62 @@
-import { cloudflareDevProxyVitePlugin, vitePlugin as remix } from '@remix-run/dev'
-import { defineConfig, PluginOption } from 'vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
-import { getLoadContext } from './workers/load-context'
+/// <reference types="vitest/config" />
+import { cloudflareDevProxyVitePlugin, vitePlugin as remix } from '@remix-run/dev';
+import { defineConfig, PluginOption } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import { getLoadContext } from './workers/load-context';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+import { playwright } from '@vitest/browser-playwright';
+const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
+// More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  plugins: [
-    cloudflareDevProxyVitePlugin({
-      getLoadContext,
-    }),
-    remix({
-      future: {
-        v3_fetcherPersist: true,
-        v3_relativeSplatPath: true,
-        v3_throwAbortReason: true,
-      },
-    }),
-    tsconfigPaths(),
-  ] as PluginOption[],
+  plugins: [cloudflareDevProxyVitePlugin({
+    getLoadContext
+  }), remix({
+    future: {
+      v3_fetcherPersist: true,
+      v3_relativeSplatPath: true,
+      v3_throwAbortReason: true
+    }
+  }), tsconfigPaths()] as PluginOption[],
   ssr: {
     resolve: {
       conditions: ['workerd', 'worker', 'browser'],
-      externalConditions: ['workerd', 'worker'],
+      externalConditions: ['workerd', 'worker']
     },
-    noExternal: true,
+    noExternal: true
   },
   resolve: {
-    mainFields: ['browser', 'module', 'main'],
+    mainFields: ['browser', 'module', 'main']
   },
   build: {
     minify: true,
     rollupOptions: {
-      external: [],
-    },
+      external: []
+    }
   },
-})
+  test: {
+    projects: [{
+      extends: true,
+      plugins: [
+      // The plugin will run tests for the stories defined in your Storybook config
+      // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
+      storybookTest({
+        configDir: path.join(dirname, '.storybook')
+      })],
+      test: {
+        name: 'storybook',
+        browser: {
+          enabled: true,
+          headless: true,
+          provider: playwright({}),
+          instances: [{
+            browser: 'chromium'
+          }]
+        },
+        setupFiles: ['.storybook/vitest.setup.ts']
+      }
+    }]
+  }
+});

@@ -54,3 +54,5 @@ docker/localstack
 *.postman_environment.json
 
 *.zip
+*storybook.log
+storybook-static
