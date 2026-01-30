@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@grounded/schemas": ["packages/schemas"],
+      "@grounded/server/shared/*": ["packages/server/shared/*"]
+    },
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "strict": true
+  }
+}
