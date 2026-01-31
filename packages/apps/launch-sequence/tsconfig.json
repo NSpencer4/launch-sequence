@@ -1,19 +1,14 @@
 {
-  "extends": "../../../tsconfig.base.json",
   "files": [],
   "references": [
     { "path": "./tsconfig.node.json" },
     { "path": "./tsconfig.cloudflare.json" }
   ],
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "checkJs": true,
+    "verbatimModuleSyntax": true,
     "skipLibCheck": true,
-    "moduleResolution": "Bundler",
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./app/*"]
-    },
-    "types": ["@cloudflare/workers-types", "node", "vite/client", "@types/node", "./worker-configuration.d.ts", "@remix-run/node"]
+    "strict": true,
+    "noEmit": true
   }
 }

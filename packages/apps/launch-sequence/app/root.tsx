@@ -1,22 +1,15 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
 import {
+  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
+  Route,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react";
+} from 'react-router'
 
-import "./index.css";
-import { LaunchSequenceThemeProvider } from "./providers/LaunchSequenceThemeProvider";
-
-export const meta: MetaFunction = () => {
-  return [
-    { charset: "utf-8" },
-    { name: "viewport", content: "width=device-width, initial-scale=1" },
-    { title: "Launch Sequence" },
-  ];
-};
+import './index.css'
+import { LaunchSequenceThemeProvider } from './providers/LaunchSequenceThemeProvider'
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -26,11 +19,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/svg+xml" href="/vite.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin=""
-        />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link
           href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
@@ -49,13 +38,42 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
-  );
+  )
 }
 
 export default function App() {
   return (
     <LaunchSequenceThemeProvider>
-      <Outlet />
+      <Layout>
+        <Outlet />
+      </Layout>
     </LaunchSequenceThemeProvider>
-  );
+  )
+}
+
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+  let message = 'Oops!'
+  let details = 'An unexpected error occurred.'
+  let stack: string | undefined
+
+  if (isRouteErrorResponse(error)) {
+    message = error.status === 404 ? '404' : 'Error'
+    details =
+      error.status === 404 ? 'The requested page could not be found.' : error.statusText || details
+  } else if (import.meta.env.DEV && error && error instanceof Error) {
+    details = error.message
+    stack = error.stack
+  }
+
+  return (
+    <main>
+      <h1>{message}</h1>
+      <p>{details}</p>
+      {stack && (
+        <pre>
+          <code>{stack}</code>
+        </pre>
+      )}
+    </main>
+  )
 }
