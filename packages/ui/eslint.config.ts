@@ -1,8 +1,8 @@
-import eslint from '@eslint/js'
 import tseslint from 'typescript-eslint'
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import globals from 'globals'
 import { defineConfig, globalIgnores } from 'eslint/config'
+import eslint from "@eslint/js";
 
 const config = defineConfig(
     // Base ESLint recommended rules
