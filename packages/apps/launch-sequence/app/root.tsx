@@ -8,12 +8,14 @@ import {
 } from "@remix-run/react";
 
 import "./index.css";
+import { LaunchSequenceThemeProvider } from "./providers/LaunchSequenceThemeProvider";
+import { LaunchSequenceTheme } from "./styles/theme/launch-sequence/launch-sequence-theme";
 
 export const meta: MetaFunction = () => {
   return [
     { charset: "utf-8" },
     { name: "viewport", content: "width=device-width, initial-scale=1" },
-    { title: "FLAGCORE - Mission Control" },
+    { title: "Launch Sequence" },
   ];
 };
 
@@ -38,7 +40,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
-        <title>FLAGCORE - Mission Control</title>
+        <title>Launch Sequence</title>
         <Meta />
         <Links />
       </head>
@@ -52,5 +54,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <LaunchSequenceThemeProvider theme={LaunchSequenceTheme}>
+      <Outlet />
+    </LaunchSequenceThemeProvider>
+  );
 }

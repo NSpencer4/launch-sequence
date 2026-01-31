@@ -17,7 +17,7 @@ export default function SideBar({ activeItem = "dashboard" }: SideBarProps) {
           <span className="material-symbols-outlined text-[24px]">layers</span>
         </div>
         <h1 className="font-display text-2xl tracking-tighter text-slate-200">
-          FLAG<span className="text-primary">CORE</span>
+          LAUNCH<span className="text-primary">SEQUENCE</span>
         </h1>
       </div>
 

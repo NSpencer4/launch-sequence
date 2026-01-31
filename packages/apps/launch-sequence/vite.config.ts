@@ -36,10 +36,7 @@ export default defineConfig({
     mainFields: ['browser', 'module', 'main']
   },
   build: {
-    minify: true,
-    rollupOptions: {
-      external: []
-    }
+    target: 'esnext'
   },
   test: {
     projects: [{

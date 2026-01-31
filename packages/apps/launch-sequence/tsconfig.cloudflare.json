@@ -6,7 +6,8 @@
     "src/**/.server/**/*",
     "src/**/.client/**/*",
     "workers/**/*",
-    "worker-configuration.d.ts"
+    "worker-configuration.d.ts",
+    "app/polyfills.ts"
   ],
   "compilerOptions": {
     "composite": true,

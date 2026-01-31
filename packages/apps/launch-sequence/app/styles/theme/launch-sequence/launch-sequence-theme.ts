@@ -1,7 +1,7 @@
 import { LaunchSequenceTheme } from "../../../providers/LaunchSequenceThemeProvider/LaunchSequenceThemeProvider.types";
 
 export const LaunchSequenceTheme: LaunchSequenceTheme = {
-  name: "FLAGCORE Mission Control",
+  name: "LAUNCHSEQUENCE Mission Control",
   colors: {
     brand: {
       primary: "#00f2ff", // Glowing Cyan
