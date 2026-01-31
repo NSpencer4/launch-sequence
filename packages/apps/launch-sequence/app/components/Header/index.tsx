@@ -1,3 +1,4 @@
+import { Box, Flex } from "@chakra-ui/react";
 import { HeaderProps } from "./Header.types";
 import Icon from "../Icon";
 
@@ -15,64 +16,150 @@ export default function Header({
   onCreateFlag,
 }: HeaderProps) {
   return (
-    <header className="h-20 border-b border-slate-700 px-8 flex items-center justify-between bg-background-dark/30 backdrop-blur-sm">
+    <Flex
+      as="header"
+      h="20"
+      borderBottom="1px solid"
+      borderColor="border.dark"
+      px="8"
+      align="center"
+      justify="space-between"
+      bg="rgba(6, 11, 24, 0.3)"
+      backdropFilter="blur(8px)"
+    >
       {/* Stats Section */}
-      <div className="flex items-center gap-12">
+      <Flex align="center" gap="12">
         {/* Total Flags */}
-        <div className="flex flex-col">
-          <span className="font-display text-sm uppercase tracking-widest text-slate-400">
+        <Flex direction="column">
+          <Box
+            as="span"
+            fontFamily="display"
+            fontSize="sm"
+            textTransform="uppercase"
+            letterSpacing="widest"
+            color="functional.grey3"
+          >
             Total Flags
-          </span>
-          <span className="font-display text-2xl text-primary glow-text">
+          </Box>
+          <Box
+            as="span"
+            fontFamily="display"
+            fontSize="2xl"
+            color="brand.primary"
+            textShadow="0 0 8px rgba(0, 242, 255, 0.6)"
+          >
             {stats.totalFlags.toLocaleString()}
-          </span>
-        </div>
+          </Box>
+        </Flex>
 
         {/* Active Flags */}
-        <div className="flex flex-col">
-          <span className="font-display text-sm uppercase tracking-widest text-slate-400">
+        <Flex direction="column">
+          <Box
+            as="span"
+            fontFamily="display"
+            fontSize="sm"
+            textTransform="uppercase"
+            letterSpacing="widest"
+            color="functional.grey3"
+          >
             Active Flags
-          </span>
-          <span className="font-display text-2xl text-slate-200">
+          </Box>
+          <Box
+            as="span"
+            fontFamily="display"
+            fontSize="2xl"
+            color="typography.secondary"
+          >
             {stats.activeFlags.toLocaleString()}
-          </span>
-        </div>
+          </Box>
+        </Flex>
 
         {/* Environment Section */}
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2">
-            <span className="font-display text-sm uppercase tracking-widest text-slate-400">
+        <Flex direction="column">
+          <Flex align="center" gap="2">
+            <Box
+              as="span"
+              fontFamily="display"
+              fontSize="sm"
+              textTransform="uppercase"
+              letterSpacing="widest"
+              color="functional.grey3"
+            >
               Environment
-            </span>
-            <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-          </div>
-          <select
+            </Box>
+            <Box
+              w="1.5"
+              h="1.5"
+              bg="status.active"
+              borderRadius="full"
+              animation="pulse 2s infinite"
+            />
+          </Flex>
+          <Box
+            as="select"
             value={environment}
-            onChange={(e) => onEnvironmentChange?.(e.target.value)}
-            className="bg-transparent border-none text-primary font-display text-base p-0 cursor-pointer focus:outline-none [&>option]:bg-background-dark"
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              onEnvironmentChange?.(e.target.value)
+            }
+            bg="transparent"
+            border="none"
+            color="brand.primary"
+            fontFamily="display"
+            fontSize="md"
+            p="0"
+            cursor="pointer"
+            _focus={{ outline: "none" }}
+            css={{
+              "& option": {
+                background: "#060b18",
+              },
+            }}
           >
             {environments.map((env) => (
               <option key={env} value={env}>
                 {env}
               </option>
             ))}
-          </select>
-        </div>
-      </div>
+          </Box>
+        </Flex>
+      </Flex>
 
       {/* Actions Section */}
-      <div className="flex items-center gap-6">
-        <button className="bg-transparent border-none p-2 cursor-pointer text-slate-400 transition-colors duration-200 hover:text-primary">
+      <Flex align="center" gap="6">
+        <Box
+          as="button"
+          bg="transparent"
+          border="none"
+          p="2"
+          cursor="pointer"
+          color="functional.grey3"
+          transition="all 0.2s ease"
+          _hover={{ color: "brand.primary" }}
+        >
           <Icon name="settings" size="md" />
-        </button>
-        <button
+        </Box>
+        <Flex
+          as="button"
           onClick={onCreateFlag}
-          className="flex items-center gap-2 bg-secondary text-black border border-white/20 px-6 py-2.5 font-display text-base font-bold tracking-widest cursor-pointer transition-all duration-200 hover:shadow-neon-gold"
+          align="center"
+          gap="2"
+          bg="brand.secondary"
+          color="functional.black"
+          border="1px solid rgba(255, 255, 255, 0.2)"
+          px="6"
+          py="2.5"
+          fontFamily="display"
+          fontSize="md"
+          fontWeight="bold"
+          letterSpacing="widest"
+          cursor="pointer"
+          transition="all 0.2s ease"
+          _hover={{ boxShadow: "neonGold" }}
         >
           <Icon name="add_circle" size="sm" />
           CREATE NEW FLAG
-        </button>
-      </div>
-    </header>
+        </Flex>
+      </Flex>
+    </Flex>
   );
 }

@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import { TagProps } from "./Tag.types";
 
 export default function Tag({
@@ -5,31 +6,61 @@ export default function Tag({
   variant = "default",
   environment,
 }: TagProps) {
-  const getVariantClasses = () => {
+  const getVariantStyles = () => {
     if (variant === "environment" && environment) {
-      const envClasses = {
-        production: "bg-green-900/30 text-green-400 border border-green-700/50",
-        staging: "bg-yellow-900/30 text-yellow-400 border border-yellow-700/50",
-        development: "bg-blue-900/30 text-blue-400 border border-blue-700/50",
+      const envStyles = {
+        production: {
+          bg: "rgba(34, 197, 94, 0.1)",
+          color: "#22c55e",
+          borderColor: "rgba(34, 197, 94, 0.2)",
+        },
+        staging: {
+          bg: "rgba(234, 179, 8, 0.1)",
+          color: "#eab308",
+          borderColor: "rgba(234, 179, 8, 0.2)",
+        },
+        development: {
+          bg: "rgba(59, 130, 246, 0.1)",
+          color: "#3b82f6",
+          borderColor: "rgba(59, 130, 246, 0.2)",
+        },
       };
-      return envClasses[environment];
+      return {
+        ...envStyles[environment],
+        border: "1px solid",
+      };
     }
 
     if (variant === "type") {
-      return "bg-transparent text-slate-400 border border-slate-600";
+      return {
+        bg: "transparent",
+        color: "functional.grey3",
+        border: "1px solid",
+        borderColor: "functional.grey4",
+      };
     }
 
-    return "bg-slate-700 text-slate-400 border-none";
+    return {
+      bg: "functional.grey5",
+      color: "functional.grey3",
+      border: "none",
+    };
   };
 
+  const styles = getVariantStyles();
+
   return (
-    <span
-      className={`
-        font-display text-xs uppercase px-1.5 py-0.5 rounded-sm
-        ${getVariantClasses()}
-      `}
+    <Box
+      as="span"
+      fontFamily="display"
+      fontSize="xs"
+      textTransform="uppercase"
+      px="1.5"
+      py="0.5"
+      borderRadius="sm"
+      {...styles}
     >
       {label}
-    </span>
+    </Box>
   );
 }

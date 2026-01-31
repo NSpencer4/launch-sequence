@@ -1,19 +1,24 @@
+import { Box } from "@chakra-ui/react";
 import { IconProps } from "./Icon.types";
 
-const sizeClasses = {
-  xs: "text-[14px]",
-  sm: "text-[18px]",
-  md: "text-[20px]",
-  lg: "text-[24px]",
-  xl: "text-[32px]",
+const sizeMap = {
+  xs: "14px",
+  sm: "18px",
+  md: "20px",
+  lg: "24px",
+  xl: "32px",
 };
 
 export default function Icon({ name, size = "md", className = "" }: IconProps) {
   return (
-    <span
-      className={`material-symbols-outlined ${sizeClasses[size]} ${className}`}
+    <Box
+      as="span"
+      className={`material-symbols-outlined ${className}`}
+      fontSize={sizeMap[size]}
+      lineHeight="1"
+      display="inline-block"
     >
       {name}
-    </span>
+    </Box>
   );
 }
