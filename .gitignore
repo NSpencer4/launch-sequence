@@ -56,3 +56,5 @@ docker/localstack
 *.zip
 *storybook.log
 storybook-static
+
+designs

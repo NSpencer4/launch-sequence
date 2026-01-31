@@ -11,21 +11,26 @@ const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(file
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  plugins: [cloudflareDevProxyVitePlugin({
-    getLoadContext
-  }), remix({
-    future: {
-      v3_fetcherPersist: true,
-      v3_relativeSplatPath: true,
-      v3_throwAbortReason: true
-    }
-  }), tsconfigPaths()] as PluginOption[],
+  plugins: [
+    cloudflareDevProxyVitePlugin({
+      getLoadContext
+    }),
+    remix({
+      future: {
+        v3_fetcherPersist: true,
+        v3_relativeSplatPath: true,
+        v3_throwAbortReason: true
+      }
+    }),
+    tsconfigPaths()
+  ] as PluginOption[],
   ssr: {
     resolve: {
       conditions: ['workerd', 'worker', 'browser'],
       externalConditions: ['workerd', 'worker']
     },
-    noExternal: true
+    noExternal: true,
+    target: 'webworker'
   },
   resolve: {
     mainFields: ['browser', 'module', 'main']
@@ -40,8 +45,6 @@ export default defineConfig({
     projects: [{
       extends: true,
       plugins: [
-      // The plugin will run tests for the stories defined in your Storybook config
-      // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
       storybookTest({
         configDir: path.join(dirname, '.storybook')
       })],

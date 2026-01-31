@@ -1,0 +1,35 @@
+import { createClient } from '@supabase/supabase-js'
+
+/**
+ * Supabase Client (Auth Only)
+ * 
+ * This client is configured for authentication purposes only.
+ * All data operations should use GraphQL via the Gateway API.
+ * 
+ * Available auth methods:
+ * - supabase.auth.signUp()
+ * - supabase.auth.signInWithPassword()
+ * - supabase.auth.signOut()
+ * - supabase.auth.getSession()
+ * - supabase.auth.getUser()
+ * - supabase.auth.onAuthStateChange()
+ * 
+ * For data operations, use GraphQL:
+ * - See src/lib/graphql/ for queries and mutations
+ * - See src/routes/ for Remix loaders and actions
+ */
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase environment variables. Make sure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set.')
+}
+
+// Create Supabase client without database types (auth only)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+  },
+})
