@@ -1,11 +1,5 @@
+import { Box, Flex } from "@chakra-ui/react";
 import { StatusBarProps } from "./StatusBar.types";
-import {
-  StyledStatusBar,
-  StatusItem,
-  StatusDot,
-  StatusText,
-  StatusIcon,
-} from "./StatusBar.styles";
 
 export default function StatusBar({
   syncStatus = "operational",
@@ -17,19 +11,55 @@ export default function StatusBar({
     error: "Live Sync Status: ERROR",
   };
 
+  const statusColors = {
+    operational: "brand.primary",
+    syncing: "brand.secondary",
+    error: "status.error",
+  };
+
   return (
-    <StyledStatusBar>
-      <StatusItem>
-        <StatusDot $status={syncStatus} />
-        <StatusText>{statusLabels[syncStatus]}</StatusText>
-      </StatusItem>
+    <Flex align="center" gap="6">
+      <Flex align="center" gap="2">
+        <Box
+          w="8px"
+          h="8px"
+          borderRadius="full"
+          bg={statusColors[syncStatus]}
+        />
+        <Box
+          as="span"
+          fontFamily="display"
+          fontSize="sm"
+          textTransform="uppercase"
+          letterSpacing="widest"
+          color="functional.grey3"
+        >
+          {statusLabels[syncStatus]}
+        </Box>
+      </Flex>
 
       {showKeyboardShortcuts && (
-        <StatusItem>
-          <StatusIcon>info</StatusIcon>
-          <StatusText>Keyboard Shortcuts Active</StatusText>
-        </StatusItem>
+        <Flex align="center" gap="2">
+          <Box
+            as="span"
+            className="material-symbols-outlined"
+            fontSize="14px"
+            color="functional.grey3"
+          >
+            info
+          </Box>
+          <Box
+            as="span"
+            fontFamily="display"
+            fontSize="sm"
+            textTransform="uppercase"
+            letterSpacing="widest"
+            color="functional.grey3"
+          >
+            Keyboard Shortcuts Active
+          </Box>
+        </Flex>
       )}
-    </StyledStatusBar>
+    </Flex>
   );
 }

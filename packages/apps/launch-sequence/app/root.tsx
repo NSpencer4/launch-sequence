@@ -9,7 +9,6 @@ import {
 
 import "./index.css";
 import { LaunchSequenceThemeProvider } from "./providers/LaunchSequenceThemeProvider";
-import { LaunchSequenceTheme } from "./styles/theme/launch-sequence/launch-sequence-theme";
 
 export const meta: MetaFunction = () => {
   return [
@@ -55,7 +54,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <LaunchSequenceThemeProvider theme={LaunchSequenceTheme}>
+    <LaunchSequenceThemeProvider>
       <Outlet />
     </LaunchSequenceThemeProvider>
   );

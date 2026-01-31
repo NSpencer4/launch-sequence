@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import { Box, Flex } from "@chakra-ui/react";
 import PageLayout from "../components/PageLayout";
 import Header from "../components/Header";
 import SearchInput from "../components/SearchInput";
@@ -8,82 +8,6 @@ import StatusBar from "../components/StatusBar";
 import Pagination from "../components/Pagination";
 import Icon from "../components/Icon";
 import { Flag } from "../components/FlagTable/FlagTable.types";
-
-const ContentWrapper = styled.div`
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  padding: ${({ theme }) => theme.spacing[8]};
-  padding-bottom: 0;
-`;
-
-const PageHeader = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing[4]};
-  margin-bottom: ${({ theme }) => theme.spacing[6]};
-`;
-
-const TitleRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const Title = styled.h2`
-  font-family: ${({ theme }) => theme.typography.fontFamily.display};
-  font-size: ${({ theme }) => theme.typography.fontSize["3xl"]};
-  color: ${({ theme }) => theme.colors.typography.primary};
-  letter-spacing: ${({ theme }) => theme.typography.letterSpacing.tight};
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing[3]};
-`;
-
-const TitleAccent = styled.span`
-  width: 8px;
-  height: 24px;
-  background: ${({ theme }) => theme.colors.brand.primary};
-`;
-
-const SearchRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing[4]};
-`;
-
-const FilterButtons = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing[2]};
-  padding-left: ${({ theme }) => theme.spacing[4]};
-  border-left: 1px solid ${({ theme }) => theme.colors.border.secondary};
-`;
-
-const FilterButton = styled.button`
-  padding: ${({ theme }) => theme.spacing[2]};
-  background: none;
-  border: none;
-  color: ${({ theme }) => theme.colors.functional.grey3};
-  cursor: pointer;
-  border-radius: ${({ theme }) => theme.borderRadius.default};
-  transition: ${({ theme }) => theme.effects.transition.default};
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.brand.primary};
-    background: rgba(0, 242, 255, 0.05);
-  }
-`;
-
-const Footer = styled.div`
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid ${({ theme }) => theme.colors.border.secondary};
-  padding: 0 ${({ theme }) => theme.spacing[2]};
-`;
 
 // Mock data
 const mockFlags: Flag[] = [
@@ -173,33 +97,100 @@ export default function FlagsPage() {
   return (
     <PageLayout activeNavItem="flag-explorer">
       <Header onCreateFlag={handleCreateFlag} />
-      <ContentWrapper>
-        <PageHeader>
-          <TitleRow>
-            <Title>
-              <TitleAccent />
+      <Box
+        flex="1"
+        overflow="hidden"
+        display="flex"
+        flexDirection="column"
+        p="8"
+        pb="0"
+      >
+        {/* Page Header */}
+        <Flex direction="column" gap="4" mb="6">
+          {/* Title Row */}
+          <Flex align="center" justify="space-between">
+            <Flex
+              as="h2"
+              align="center"
+              gap="3"
+              fontFamily="display"
+              fontSize="3xl"
+              color="typography.primary"
+              letterSpacing="tight"
+            >
+              <Box w="8px" h="24px" bg="brand.primary" />
               FLAGS INDEX
-            </Title>
-          </TitleRow>
-          <SearchRow>
+            </Flex>
+          </Flex>
+
+          {/* Search Row */}
+          <Flex align="center" gap="4">
             <SearchInput
               value={searchQuery}
               onChange={setSearchQuery}
               placeholder="SEARCH BY NAME, KEY, OR TAG (CMD+K)"
             />
-            <FilterButtons>
-              <FilterButton title="Filter Type">
+            <Flex
+              align="center"
+              gap="2"
+              pl="4"
+              borderLeft="1px solid"
+              borderColor="border.secondary"
+            >
+              <Box
+                as="button"
+                p="2"
+                bg="none"
+                border="none"
+                color="functional.grey3"
+                cursor="pointer"
+                borderRadius="base"
+                transition="all 0.2s ease"
+                title="Filter Type"
+                _hover={{
+                  color: "brand.primary",
+                  bg: "rgba(0, 242, 255, 0.05)",
+                }}
+              >
                 <Icon name="filter_list" size="md" />
-              </FilterButton>
-              <FilterButton title="Status Filter">
+              </Box>
+              <Box
+                as="button"
+                p="2"
+                bg="none"
+                border="none"
+                color="functional.grey3"
+                cursor="pointer"
+                borderRadius="base"
+                transition="all 0.2s ease"
+                title="Status Filter"
+                _hover={{
+                  color: "brand.primary",
+                  bg: "rgba(0, 242, 255, 0.05)",
+                }}
+              >
                 <Icon name="rule" size="md" />
-              </FilterButton>
-              <FilterButton title="Tag Filter">
+              </Box>
+              <Box
+                as="button"
+                p="2"
+                bg="none"
+                border="none"
+                color="functional.grey3"
+                cursor="pointer"
+                borderRadius="base"
+                transition="all 0.2s ease"
+                title="Tag Filter"
+                _hover={{
+                  color: "brand.primary",
+                  bg: "rgba(0, 242, 255, 0.05)",
+                }}
+              >
                 <Icon name="sell" size="md" />
-              </FilterButton>
-            </FilterButtons>
-          </SearchRow>
-        </PageHeader>
+              </Box>
+            </Flex>
+          </Flex>
+        </Flex>
 
         <FlagTable
           flags={flags}
@@ -210,7 +201,15 @@ export default function FlagsPage() {
           onFlagClick={handleFlagClick}
         />
 
-        <Footer>
+        {/* Footer */}
+        <Flex
+          h="48px"
+          align="center"
+          justify="space-between"
+          borderTop="1px solid"
+          borderColor="border.secondary"
+          px="2"
+        >
           <StatusBar syncStatus="operational" />
           <Pagination
             currentPage={currentPage}
@@ -218,8 +217,8 @@ export default function FlagsPage() {
             itemsPerPage={50}
             onPageChange={setCurrentPage}
           />
-        </Footer>
-      </ContentWrapper>
+        </Flex>
+      </Box>
     </PageLayout>
   );
 }

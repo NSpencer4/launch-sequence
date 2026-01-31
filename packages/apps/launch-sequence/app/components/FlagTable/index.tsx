@@ -1,3 +1,4 @@
+import { Box, Flex, Table } from "@chakra-ui/react";
 import { FlagTableProps } from "./FlagTable.types";
 import Toggle from "../Toggle";
 import Tag from "../Tag";
@@ -13,96 +14,254 @@ export default function FlagTable({
   const allSelected = flags.length > 0 && selectedIds.length === flags.length;
 
   return (
-    <div className="flex-1 overflow-y-auto border border-primary/15 bg-card-dark-alt custom-scrollbar">
-      <table className="w-full text-left border-collapse">
-        <thead className="sticky top-0 bg-background-dark/90 backdrop-blur-sm z-10 border-b border-primary/20">
-          <tr>
-            <th className="w-12 px-6 py-4 font-display text-sm font-normal uppercase tracking-widest text-slate-400">
-              <input
+    <Box
+      flex="1"
+      overflowY="auto"
+      border="1px solid"
+      borderColor="border.primary"
+      bg="background.cardAlt"
+      css={{
+        "&::-webkit-scrollbar": {
+          width: "4px",
+        },
+        "&::-webkit-scrollbar-track": {
+          background: "rgba(0, 0, 0, 0.2)",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: "rgba(0, 242, 255, 0.3)",
+          borderRadius: "10px",
+        },
+      }}
+    >
+      <Table.Root size="md">
+        <Table.Header>
+          <Table.Row
+            position="sticky"
+            top="0"
+            bg="rgba(6, 11, 24, 0.9)"
+            backdropFilter="blur(8px)"
+            zIndex="10"
+            borderBottom="1px solid rgba(0, 242, 255, 0.2)"
+          >
+            <Table.ColumnHeader
+              w="12"
+              px="6"
+              py="4"
+              fontFamily="display"
+              fontSize="sm"
+              fontWeight="normal"
+              textTransform="uppercase"
+              letterSpacing="widest"
+              color="functional.grey3"
+            >
+              <Box
+                as="input"
                 type="checkbox"
                 checked={allSelected}
-                onChange={(e) => onSelectAll?.(e.target.checked)}
-                className="appearance-none w-4 h-4 border border-slate-600 bg-transparent cursor-pointer transition-all duration-200 checked:bg-primary checked:border-primary focus:outline-none"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  onSelectAll?.(e.target.checked)
+                }
+                appearance="none"
+                w="4"
+                h="4"
+                border="1px solid"
+                borderColor="functional.grey4"
+                bg="transparent"
+                cursor="pointer"
+                transition="all 0.2s ease"
+                css={{
+                  "&:checked": {
+                    background: "#00f2ff",
+                    borderColor: "#00f2ff",
+                  },
+                  "&:focus": {
+                    outline: "none",
+                  },
+                }}
               />
-            </th>
-            <th className="px-6 py-4 font-display text-sm font-normal uppercase tracking-widest text-slate-400">
+            </Table.ColumnHeader>
+            <Table.ColumnHeader
+              px="6"
+              py="4"
+              fontFamily="display"
+              fontSize="sm"
+              fontWeight="normal"
+              textTransform="uppercase"
+              letterSpacing="widest"
+              color="functional.grey3"
+            >
               Flag Name &amp; Key
-            </th>
-            <th className="px-6 py-4 font-display text-sm font-normal uppercase tracking-widest text-slate-400">
+            </Table.ColumnHeader>
+            <Table.ColumnHeader
+              px="6"
+              py="4"
+              fontFamily="display"
+              fontSize="sm"
+              fontWeight="normal"
+              textTransform="uppercase"
+              letterSpacing="widest"
+              color="functional.grey3"
+            >
               Type
-            </th>
-            <th className="px-6 py-4 font-display text-sm font-normal uppercase tracking-widest text-slate-400">
+            </Table.ColumnHeader>
+            <Table.ColumnHeader
+              px="6"
+              py="4"
+              fontFamily="display"
+              fontSize="sm"
+              fontWeight="normal"
+              textTransform="uppercase"
+              letterSpacing="widest"
+              color="functional.grey3"
+            >
               Environment Status
-            </th>
-            <th className="px-6 py-4 font-display text-sm font-normal uppercase tracking-widest text-slate-400">
+            </Table.ColumnHeader>
+            <Table.ColumnHeader
+              px="6"
+              py="4"
+              fontFamily="display"
+              fontSize="sm"
+              fontWeight="normal"
+              textTransform="uppercase"
+              letterSpacing="widest"
+              color="functional.grey3"
+            >
               Tags
-            </th>
-            <th className="px-6 py-4 font-display text-sm font-normal uppercase tracking-widest text-slate-400 text-right">
+            </Table.ColumnHeader>
+            <Table.ColumnHeader
+              px="6"
+              py="4"
+              fontFamily="display"
+              fontSize="sm"
+              fontWeight="normal"
+              textTransform="uppercase"
+              letterSpacing="widest"
+              color="functional.grey3"
+              textAlign="right"
+            >
               Last Modified
-            </th>
-          </tr>
-        </thead>
-        <tbody>
+            </Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           {flags.map((flag) => (
-            <tr
+            <Table.Row
               key={flag.id}
               onClick={() => onFlagClick?.(flag)}
-              className="border-b border-slate-800 cursor-pointer transition-colors duration-200 hover:bg-primary/5 group"
+              borderBottom="1px solid"
+              borderColor="border.muted"
+              cursor="pointer"
+              transition="all 0.2s ease"
+              _hover={{
+                bg: "rgba(0, 242, 255, 0.05)",
+                "& .flag-name": {
+                  color: "brand.primary",
+                },
+                "& .checkbox": {
+                  borderColor: "rgba(0, 242, 255, 0.5)",
+                },
+              }}
             >
-              <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
-                <input
+              <Table.Cell px="6" py="4" onClick={(e) => e.stopPropagation()}>
+                <Box
+                  as="input"
                   type="checkbox"
+                  className="checkbox"
                   checked={selectedIds.includes(flag.id)}
-                  onChange={(e) => onSelectFlag?.(flag.id, e.target.checked)}
-                  className="appearance-none w-4 h-4 border border-slate-600 bg-transparent cursor-pointer transition-all duration-200 checked:bg-primary checked:border-primary focus:outline-none group-hover:border-primary/50"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    onSelectFlag?.(flag.id, e.target.checked)
+                  }
+                  appearance="none"
+                  w="4"
+                  h="4"
+                  border="1px solid"
+                  borderColor="functional.grey4"
+                  bg="transparent"
+                  cursor="pointer"
+                  transition="all 0.2s ease"
+                  css={{
+                    "&:checked": {
+                      background: "#00f2ff",
+                      borderColor: "#00f2ff",
+                    },
+                    "&:focus": {
+                      outline: "none",
+                    },
+                  }}
                 />
-              </td>
-              <td className="px-6 py-4">
-                <div className="flex flex-col">
-                  <span className="text-lg font-semibold text-slate-200 transition-colors duration-200 group-hover:text-primary">
+              </Table.Cell>
+              <Table.Cell px="6" py="4">
+                <Flex direction="column">
+                  <Box
+                    as="span"
+                    className="flag-name"
+                    fontSize="lg"
+                    fontWeight="semibold"
+                    color="typography.secondary"
+                    transition="all 0.2s ease"
+                  >
                     {flag.name}
-                  </span>
-                  <span className="font-mono text-sm text-slate-400">
+                  </Box>
+                  <Box
+                    as="span"
+                    fontFamily="mono"
+                    fontSize="sm"
+                    color="functional.grey3"
+                  >
                     {flag.key}
-                  </span>
-                </div>
-              </td>
-              <td className="px-6 py-4">
+                  </Box>
+                </Flex>
+              </Table.Cell>
+              <Table.Cell px="6" py="4">
                 <Tag label={flag.type} variant="type" />
-              </td>
-              <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
+              </Table.Cell>
+              <Table.Cell px="6" py="4" onClick={(e) => e.stopPropagation()}>
                 <Toggle
                   checked={flag.active}
                   onChange={(active) => onToggleFlag?.(flag.id, active)}
                   label={flag.active ? "Active" : "Inactive"}
                 />
-              </td>
-              <td className="px-6 py-4">
-                <div className="flex gap-1 flex-wrap">
+              </Table.Cell>
+              <Table.Cell px="6" py="4">
+                <Flex gap="1" flexWrap="wrap">
                   {flag.tags.map((tag) => (
                     <Tag key={tag} label={tag} />
                   ))}
-                </div>
-              </td>
-              <td className="px-6 py-4 text-right">
-                <div className="flex flex-col items-end">
-                  <span className="font-mono text-sm text-slate-400 uppercase tracking-tighter">
+                </Flex>
+              </Table.Cell>
+              <Table.Cell px="6" py="4" textAlign="right">
+                <Flex direction="column" align="flex-end">
+                  <Box
+                    as="span"
+                    fontFamily="mono"
+                    fontSize="sm"
+                    color="functional.grey3"
+                    textTransform="uppercase"
+                    letterSpacing="tighter"
+                  >
                     {flag.lastModified}
-                  </span>
-                </div>
-              </td>
-            </tr>
+                  </Box>
+                </Flex>
+              </Table.Cell>
+            </Table.Row>
           ))}
-          <tr>
-            <td
+          <Table.Row>
+            <Table.Cell
               colSpan={6}
-              className="px-6 py-8 text-center font-display text-sm text-slate-500 tracking-[0.5em] uppercase"
+              px="6"
+              py="8"
+              textAlign="center"
+              fontFamily="display"
+              fontSize="sm"
+              color="functional.grey4"
+              letterSpacing="0.5em"
+              textTransform="uppercase"
             >
               End of initial viewport - more flags available
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+            </Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table.Root>
+    </Box>
   );
 }

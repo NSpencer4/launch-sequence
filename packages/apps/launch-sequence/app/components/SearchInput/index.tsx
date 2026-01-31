@@ -1,3 +1,4 @@
+import { Box, Input } from "@chakra-ui/react";
 import { SearchInputProps } from "./SearchInput.types";
 
 export default function SearchInput({
@@ -6,24 +7,45 @@ export default function SearchInput({
   placeholder = "Search...",
 }: SearchInputProps) {
   return (
-    <div className="relative flex-1">
-      <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">
+    <Box position="relative" flex="1">
+      <Box
+        as="span"
+        className="material-symbols-outlined"
+        position="absolute"
+        left="3"
+        top="50%"
+        transform="translateY(-50%)"
+        color="functional.grey3"
+        fontSize="18px"
+        zIndex="1"
+        pointerEvents="none"
+      >
         search
-      </span>
-      <input
+      </Box>
+      <Input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="
-          w-full bg-slate-900/50 border border-slate-700 rounded
-          py-2.5 pl-10 pr-4
-          font-display text-base tracking-widest text-slate-200
-          transition-all duration-200
-          placeholder:text-slate-500
-          focus:outline-none focus:border-primary
-        "
+        w="full"
+        bg="rgba(15, 23, 42, 0.5)"
+        border="1px solid"
+        borderColor="border.dark"
+        borderRadius="base"
+        py="2.5"
+        pl="10"
+        pr="4"
+        fontFamily="display"
+        fontSize="md"
+        letterSpacing="widest"
+        color="typography.secondary"
+        transition="all 0.2s ease"
+        _placeholder={{ color: "functional.grey4" }}
+        _focus={{
+          outline: "none",
+          borderColor: "brand.primary",
+        }}
       />
-    </div>
+    </Box>
   );
 }

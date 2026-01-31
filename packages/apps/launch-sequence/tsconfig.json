@@ -7,12 +7,13 @@
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "moduleResolution": "Bundler",
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"]
     },
-    "types": ["@cloudflare/workers-types", "node", "vite/client", "@types/node", "./worker-configuration.d.ts"]
+    "types": ["@cloudflare/workers-types", "node", "vite/client", "@types/node", "./worker-configuration.d.ts", "@remix-run/node"]
   }
 }

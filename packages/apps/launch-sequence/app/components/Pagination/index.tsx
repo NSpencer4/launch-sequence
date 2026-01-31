@@ -1,10 +1,5 @@
+import { Box, Flex } from "@chakra-ui/react";
 import { PaginationProps } from "./Pagination.types";
-import {
-  StyledPagination,
-  PageInfo,
-  NavButton,
-  NavIcon,
-} from "./Pagination.styles";
 
 export default function Pagination({
   currentPage,
@@ -17,25 +12,72 @@ export default function Pagination({
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
-    <StyledPagination>
-      <span>Rows per page: {itemsPerPage}</span>
-      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-        <NavButton
+    <Flex
+      align="center"
+      gap="4"
+      fontFamily="display"
+      fontSize="sm"
+      letterSpacing="widest"
+      color="functional.grey3"
+    >
+      <Box as="span">Rows per page: {itemsPerPage}</Box>
+      <Flex align="center" gap="2">
+        <Box
+          as="button"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
+          bg="none"
+          border="none"
+          p="1"
+          cursor={currentPage <= 1 ? "not-allowed" : "pointer"}
+          color="functional.grey3"
+          transition="all 0.2s ease"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          opacity={currentPage <= 1 ? 0.3 : 1}
+          _hover={{
+            color: currentPage <= 1 ? "functional.grey3" : "brand.primary",
+          }}
         >
-          <NavIcon>chevron_left</NavIcon>
-        </NavButton>
-        <PageInfo>
+          <Box
+            as="span"
+            className="material-symbols-outlined"
+            fontSize="14px"
+          >
+            chevron_left
+          </Box>
+        </Box>
+        <Box as="span" color="typography.primary">
           {startItem} - {endItem} of {totalItems.toLocaleString()}
-        </PageInfo>
-        <NavButton
+        </Box>
+        <Box
+          as="button"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
+          bg="none"
+          border="none"
+          p="1"
+          cursor={currentPage >= totalPages ? "not-allowed" : "pointer"}
+          color="functional.grey3"
+          transition="all 0.2s ease"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          opacity={currentPage >= totalPages ? 0.3 : 1}
+          _hover={{
+            color: currentPage >= totalPages ? "functional.grey3" : "brand.primary",
+          }}
         >
-          <NavIcon>chevron_right</NavIcon>
-        </NavButton>
-      </div>
-    </StyledPagination>
+          <Box
+            as="span"
+            className="material-symbols-outlined"
+            fontSize="14px"
+          >
+            chevron_right
+          </Box>
+        </Box>
+      </Flex>
+    </Flex>
   );
 }

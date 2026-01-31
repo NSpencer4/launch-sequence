@@ -1,38 +1,57 @@
+import { Box, Flex } from "@chakra-ui/react";
 import { PageLayoutProps } from "./PageLayout.types";
-import {
-  LayoutWrapper,
-  MainContent,
-  BackgroundGlow,
-  GlowOrb,
-} from "./PageLayout.styles";
 import SideBar from "../SideBar";
-import { useTheme } from "styled-components";
-import { LaunchSequenceTheme } from "../../providers/LaunchSequenceThemeProvider/LaunchSequenceThemeProvider.types";
 
 export default function PageLayout({
   children,
   activeNavItem = "dashboard",
 }: PageLayoutProps) {
-  const theme = useTheme() as LaunchSequenceTheme;
-
   return (
-    <LayoutWrapper>
+    <Flex
+      h="100vh"
+      w="full"
+      bg="radial-gradient(circle at 50% 50%, #0a192f 0%, #060b18 100%)"
+      color="typography.secondary"
+      fontFamily="body"
+      overflow="hidden"
+    >
       <SideBar activeItem={activeNavItem} />
-      <MainContent>{children}</MainContent>
-      <BackgroundGlow>
-        <GlowOrb
-          $color={theme.colors.brand.primary}
-          $size="50%"
-          $position={{ top: "-10%", right: "-10%" }}
-          $blur="150px"
+      <Box as="main" flex="1" display="flex" flexDirection="column" overflow="hidden">
+        {children}
+      </Box>
+      {/* Background Glow */}
+      <Box
+        position="fixed"
+        top="0"
+        left="0"
+        w="full"
+        h="full"
+        pointerEvents="none"
+        zIndex="-1"
+        overflow="hidden"
+        opacity="0.1"
+      >
+        <Box
+          position="absolute"
+          w="50%"
+          h="50%"
+          bg="brand.primary"
+          borderRadius="50%"
+          filter="blur(150px)"
+          top="-10%"
+          right="-10%"
         />
-        <GlowOrb
-          $color={theme.colors.brand.tertiary}
-          $size="40%"
-          $position={{ bottom: "-10%", left: "-10%" }}
-          $blur="120px"
+        <Box
+          position="absolute"
+          w="40%"
+          h="40%"
+          bg="brand.tertiary"
+          borderRadius="50%"
+          filter="blur(120px)"
+          bottom="-10%"
+          left="-10%"
         />
-      </BackgroundGlow>
-    </LayoutWrapper>
+      </Box>
+    </Flex>
   );
 }
