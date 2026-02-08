@@ -255,7 +255,7 @@ resource "aws_wafv2_web_acl" "api" {
     }
   }
 
-  # Rate limiting — 10,000 requests per 5-minute window
+  # Rate limiting — 10,000 requests per 5-minute window, scoped to /graphql
   rule {
     name     = "RateLimitRule"
     priority = 50
@@ -268,6 +268,20 @@ resource "aws_wafv2_web_acl" "api" {
       rate_based_statement {
         limit              = 10000
         aggregate_key_type = "IP"
+
+        scope_down_statement {
+          byte_match_statement {
+            search_string         = "/graphql"
+            positional_constraint = "STARTS_WITH"
+            field_to_match {
+              uri_path {}
+            }
+            text_transformation {
+              priority = 0
+              type     = "LOWERCASE"
+            }
+          }
+        }
       }
     }
 
