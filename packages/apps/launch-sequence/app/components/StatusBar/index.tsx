@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { StatusBarProps } from "./StatusBar.types";
+import type { StatusBarProps } from './StatusBar.types'
 
 export default function StatusBar({
   syncStatus = "operational",

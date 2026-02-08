@@ -1,5 +1,5 @@
 import { Box, Flex, VStack } from "@chakra-ui/react";
-import { SideBarProps, NavItemConfig } from "./SideBar.types";
+import type { SideBarProps, NavItemConfig } from './SideBar.types'
 
 const navItems: NavItemConfig[] = [
   { id: "dashboard", label: "Dashboard", icon: "dashboard", href: "/" },

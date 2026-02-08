@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { ToggleProps } from "./Toggle.types";
+import type { ToggleProps } from './Toggle.types'
 
 export default function Toggle({
   checked,

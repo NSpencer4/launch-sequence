@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { PaginationProps } from "./Pagination.types";
+import type { PaginationProps } from './Pagination.types'
 
 export default function Pagination({
   currentPage,

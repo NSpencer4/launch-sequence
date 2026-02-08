@@ -1,5 +1,5 @@
 import { Box, Flex, Table } from "@chakra-ui/react";
-import { FlagTableProps } from "./FlagTable.types";
+import type { FlagTableProps } from './FlagTable.types'
 import Toggle from "../Toggle";
 import Tag from "../Tag";
 

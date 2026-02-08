@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { IconProps } from "./Icon.types";
+import type { IconProps } from './Icon.types'
 
 const sizeMap = {
   xs: "14px",

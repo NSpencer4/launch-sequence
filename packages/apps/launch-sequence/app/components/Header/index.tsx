@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { HeaderProps } from "./Header.types";
+import type { HeaderProps } from './Header.types'
 import Icon from "../Icon";
 
 const defaultEnvironments = [

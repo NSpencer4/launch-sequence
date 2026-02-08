@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { TagProps } from "./Tag.types";
+import type { TagProps } from './Tag.types'
 
 export default function Tag({
   label,

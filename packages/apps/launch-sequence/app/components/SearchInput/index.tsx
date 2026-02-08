@@ -1,5 +1,5 @@
 import { Box, Input } from "@chakra-ui/react";
-import { SearchInputProps } from "./SearchInput.types";
+import type { SearchInputProps } from './SearchInput.types'
 
 export default function SearchInput({
   value,
