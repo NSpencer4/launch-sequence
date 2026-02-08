@@ -9,7 +9,8 @@
       "Bash(node -e:*)",
       "Bash(terraform fmt:*)",
       "Bash(terraform validate:*)",
-      "Bash(terraform init:*)"
+      "Bash(terraform init:*)",
+      "Bash(find:*)"
     ]
   }
 }
