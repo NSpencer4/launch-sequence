@@ -28,6 +28,28 @@ resource "aws_s3_bucket_ownership_controls" "spa" {
   }
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "spa" {
+  bucket = aws_s3_bucket.spa.id
+
+  rule {
+    id     = "expire-noncurrent-versions"
+    status = "Enabled"
+
+    noncurrent_version_expiration {
+      noncurrent_days = 14
+    }
+  }
+
+  rule {
+    id     = "abort-incomplete-multipart"
+    status = "Enabled"
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 1
+    }
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "spa" {
   bucket = aws_s3_bucket.spa.id
 
