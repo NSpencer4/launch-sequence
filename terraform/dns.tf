@@ -3,6 +3,7 @@ resource "aws_route53_zone" "main" {
 }
 
 resource "aws_acm_certificate" "spa" {
+  provider          = aws.us_east_1
   domain_name       = var.domain_name
   subject_alternative_names = ["www.${var.domain_name}"]
   validation_method = "DNS"
@@ -30,6 +31,7 @@ resource "aws_route53_record" "cert_validation" {
 }
 
 resource "aws_acm_certificate_validation" "spa" {
+  provider = aws.us_east_1
   certificate_arn         = aws_acm_certificate.spa.arn
   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
 }
@@ -50,6 +52,30 @@ resource "aws_route53_record" "spa_www" {
   zone_id = aws_route53_zone.main.zone_id
   name    = "www.${var.domain_name}"
   type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.spa.domain_name
+    zone_id                = aws_cloudfront_distribution.spa.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "spa_apex_ipv6" {
+  zone_id = aws_route53_zone.main.zone_id
+  name    = var.domain_name
+  type    = "AAAA"
+
+  alias {
+    name                   = aws_cloudfront_distribution.spa.domain_name
+    zone_id                = aws_cloudfront_distribution.spa.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "spa_www_ipv6" {
+  zone_id = aws_route53_zone.main.zone_id
+  name    = "www.${var.domain_name}"
+  type    = "AAAA"
 
   alias {
     name                   = aws_cloudfront_distribution.spa.domain_name
