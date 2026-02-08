@@ -1,5 +1,5 @@
-import * as eslint from "@eslint/js";
-import * as tseslint from "typescript-eslint";
+import * as eslint from '@eslint/js'
+import * as tseslint from 'typescript-eslint'
 import * as eslintConfigPrettier from 'eslint-config-prettier'
 
 export default tseslint.config(
@@ -8,19 +8,19 @@ export default tseslint.config(
   eslintConfigPrettier,
   {
     ignores: [
-      "**/node_modules/**",
-      "**/dist/**",
-      "**/build/**",
-      "**/testing/**",
-      "**/scripts/**",
-      "**/*.config.js",
-      "**/*.config.mjs",
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/build/**',
+      '**/testing/**',
+      '**/scripts/**',
+      '**/*.config.js',
+      '**/*.config.mjs',
     ],
   },
   {
     languageOptions: {
       ecmaVersion: 2020,
-      sourceType: "module",
+      sourceType: 'module',
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
@@ -28,41 +28,41 @@ export default tseslint.config(
       },
     },
     settings: {
-      "import/resolver": {
+      'import/resolver': {
         node: {
-          extensions: [".ts", ".tsx", ".js"],
-          moduleDirectory: ["node_modules", "src"],
+          extensions: ['.ts', '.tsx', '.js'],
+          moduleDirectory: ['node_modules', 'src'],
         },
       },
     },
     rules: {
-      "linebreak-style": "off",
-      "spaced-comment": "off",
-      "no-return-assign": "off",
-      "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": "error",
-      "no-use-before-define": "off",
-      "@typescript-eslint/no-use-before-define": [
-        "error",
+      'linebreak-style': 'off',
+      'spaced-comment': 'off',
+      'no-return-assign': 'off',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'error',
+      'no-use-before-define': 'off',
+      '@typescript-eslint/no-use-before-define': [
+        'error',
         {
           functions: false,
         },
       ],
-      "no-plusplus": [
-        "error",
+      'no-plusplus': [
+        'error',
         {
           allowForLoopAfterthoughts: true,
         },
       ],
-      "no-else-return": [
-        "error",
+      'no-else-return': [
+        'error',
         {
           allowElseIf: true,
         },
       ],
-      "no-console": "warn",
-      "no-shadow": "off",
-      "@typescript-eslint/no-shadow": "error",
+      'no-console': 'warn',
+      'no-shadow': 'off',
+      '@typescript-eslint/no-shadow': 'error',
     },
-  }
-);
+  },
+)
