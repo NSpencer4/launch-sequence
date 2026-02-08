@@ -1,6 +1,6 @@
-import eslint from "@eslint/js";
-import tseslint from "typescript-eslint";
-import eslintConfigPrettier from "eslint-config-prettier";
+import * as eslint from "@eslint/js";
+import * as tseslint from "typescript-eslint";
+import * as eslintConfigPrettier from 'eslint-config-prettier'
 
 export default tseslint.config(
   eslint.configs.recommended,
