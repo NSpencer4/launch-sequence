@@ -54,20 +54,22 @@ resource "aws_api_gateway_deployment" "main" {
   provider    = aws.us_east_1
   rest_api_id = aws_api_gateway_rest_api.main.id
 
-  # When routes are added, force redeployment by hashing their IDs:
-  #
-  # triggers = {
-  #   redeployment = sha1(jsonencode([
-  #     aws_api_gateway_resource.graphql.id,
-  #     aws_api_gateway_method.graphql_post.id,
-  #     aws_api_gateway_integration.graphql_post.id,
-  #   ]))
-  # }
-  #
-  # depends_on = [
-  #   aws_api_gateway_method.graphql_post,
-  #   aws_api_gateway_integration.graphql_post,
-  # ]
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_resource.graphql.id,
+      aws_api_gateway_method.graphql_post.id,
+      aws_api_gateway_integration.graphql_post.id,
+      aws_api_gateway_method.graphql_options.id,
+      aws_api_gateway_integration.graphql_options.id,
+    ]))
+  }
+
+  depends_on = [
+    aws_api_gateway_method.graphql_post,
+    aws_api_gateway_integration.graphql_post,
+    aws_api_gateway_method.graphql_options,
+    aws_api_gateway_integration.graphql_options,
+  ]
 
   lifecycle {
     create_before_destroy = true
@@ -134,21 +136,172 @@ resource "aws_cloudwatch_log_group" "api_gateway" {
 }
 
 # ---------------------------------------------------------------------------
-# VPC Link — deferred until backend services with an NLB are deployed
+# /graphql Resource + Lambda Authorizer
 # ---------------------------------------------------------------------------
 
-# REST API VPC Links require a Network Load Balancer target.
-# Uncomment and configure when backend services are added:
-#
-# resource "aws_api_gateway_vpc_link" "main" {
-#   provider    = aws.us_east_1
-#   name        = "${var.project_name}-${var.environment}-vpc-link"
-#   target_arns = [aws_lb.backend.arn]
-#
-#   tags = {
-#     Name = "${var.project_name}-${var.environment}-vpc-link"
-#   }
-# }
+resource "aws_api_gateway_resource" "graphql" {
+  provider = aws.us_east_1
+
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  parent_id   = aws_api_gateway_rest_api.main.root_resource_id
+  path_part   = "graphql"
+}
+
+resource "aws_api_gateway_authorizer" "lambda" {
+  provider = aws.us_east_1
+
+  rest_api_id                      = aws_api_gateway_rest_api.main.id
+  name                             = "${var.project_name}-${var.environment}-authorizer"
+  type                             = "TOKEN"
+  authorizer_uri                   = aws_lambda_function.authorizer.invoke_arn
+  authorizer_result_ttl_in_seconds = 300
+}
+
+resource "aws_lambda_permission" "authorizer_apigw" {
+  provider = aws.us_east_1
+
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.authorizer.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.main.execution_arn}/authorizers/${aws_api_gateway_authorizer.lambda.id}"
+}
+
+# POST /graphql — Lambda proxy with custom authorizer
+resource "aws_api_gateway_method" "graphql_post" {
+  provider = aws.us_east_1
+
+  rest_api_id   = aws_api_gateway_rest_api.main.id
+  resource_id   = aws_api_gateway_resource.graphql.id
+  http_method   = "POST"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.lambda.id
+}
+
+resource "aws_api_gateway_integration" "graphql_post" {
+  provider = aws.us_east_1
+
+  rest_api_id             = aws_api_gateway_rest_api.main.id
+  resource_id             = aws_api_gateway_resource.graphql.id
+  http_method             = aws_api_gateway_method.graphql_post.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.graphql.invoke_arn
+}
+
+# ---------------------------------------------------------------------------
+# CORS — OPTIONS preflight for /graphql
+# ---------------------------------------------------------------------------
+
+resource "aws_api_gateway_method" "graphql_options" {
+  provider = aws.us_east_1
+
+  rest_api_id   = aws_api_gateway_rest_api.main.id
+  resource_id   = aws_api_gateway_resource.graphql.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "graphql_options" {
+  provider = aws.us_east_1
+
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.graphql.id
+  http_method = aws_api_gateway_method.graphql_options.http_method
+  type        = "MOCK"
+
+  request_templates = {
+    "application/json" = "{\"statusCode\": 200}"
+  }
+}
+
+resource "aws_api_gateway_method_response" "graphql_options" {
+  provider = aws.us_east_1
+
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.graphql.id
+  http_method = aws_api_gateway_method.graphql_options.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
+  }
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+}
+
+resource "aws_api_gateway_integration_response" "graphql_options" {
+  provider = aws.us_east_1
+
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.graphql.id
+  http_method = aws_api_gateway_method.graphql_options.http_method
+  status_code = aws_api_gateway_method_response.graphql_options.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization'"
+    "method.response.header.Access-Control-Allow-Methods" = "'OPTIONS,POST'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'${var.cors_allowed_origin}'"
+  }
+}
+
+# CORS headers on gateway error responses (4XX / 5XX)
+resource "aws_api_gateway_gateway_response" "default_4xx" {
+  provider = aws.us_east_1
+
+  rest_api_id   = aws_api_gateway_rest_api.main.id
+  response_type = "DEFAULT_4XX"
+
+  response_parameters = {
+    "gatewayresponse.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization'"
+    "gatewayresponse.header.Access-Control-Allow-Methods" = "'OPTIONS,POST'"
+    "gatewayresponse.header.Access-Control-Allow-Origin"  = "'${var.cors_allowed_origin}'"
+  }
+}
+
+resource "aws_api_gateway_gateway_response" "default_5xx" {
+  provider = aws.us_east_1
+
+  rest_api_id   = aws_api_gateway_rest_api.main.id
+  response_type = "DEFAULT_5XX"
+
+  response_parameters = {
+    "gatewayresponse.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization'"
+    "gatewayresponse.header.Access-Control-Allow-Methods" = "'OPTIONS,POST'"
+    "gatewayresponse.header.Access-Control-Allow-Origin"  = "'${var.cors_allowed_origin}'"
+  }
+}
+
+# ---------------------------------------------------------------------------
+# Custom Domain — api.<domain_name>
+# ---------------------------------------------------------------------------
+
+resource "aws_api_gateway_domain_name" "api" {
+  provider = aws.us_east_1
+
+  domain_name              = "api.${var.domain_name}"
+  regional_certificate_arn = aws_acm_certificate_validation.api.certificate_arn
+
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
+
+  tags = {
+    Name = "api.${var.domain_name}"
+  }
+}
+
+resource "aws_api_gateway_base_path_mapping" "api" {
+  provider = aws.us_east_1
+
+  api_id      = aws_api_gateway_rest_api.main.id
+  stage_name  = aws_api_gateway_stage.main.stage_name
+  domain_name = aws_api_gateway_domain_name.api.domain_name
+}
 
 # ---------------------------------------------------------------------------
 # Regional WAF for API Gateway

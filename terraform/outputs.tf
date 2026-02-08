@@ -71,3 +71,30 @@ output "waf_api_web_acl_arn" {
   description = "WAF WebACL ARN attached to API Gateway"
   value       = aws_wafv2_web_acl.api.arn
 }
+
+# Lambda outputs
+
+output "lambda_function_name" {
+  description = "GraphQL Lambda function name"
+  value       = aws_lambda_function.graphql.function_name
+}
+
+output "lambda_function_arn" {
+  description = "GraphQL Lambda function ARN"
+  value       = aws_lambda_function.graphql.arn
+}
+
+output "authorizer_lambda_function_name" {
+  description = "Authorizer Lambda function name"
+  value       = aws_lambda_function.authorizer.function_name
+}
+
+output "lambda_code_s3_bucket" {
+  description = "S3 bucket name for Lambda deployment packages"
+  value       = aws_s3_bucket.lambda_code.id
+}
+
+output "api_custom_domain_url" {
+  description = "Custom domain URL for the API"
+  value       = "https://api.${var.domain_name}"
+}
