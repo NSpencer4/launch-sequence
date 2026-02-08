@@ -81,6 +81,8 @@ resource "aws_api_gateway_stage" "main" {
   rest_api_id   = aws_api_gateway_rest_api.main.id
   stage_name    = var.environment
 
+  depends_on = [aws_api_gateway_account.main]
+
   access_log_settings {
     destination_arn = aws_cloudwatch_log_group.api_gateway.arn
     format = jsonencode({
@@ -161,13 +163,13 @@ resource "aws_wafv2_web_acl" "api" {
     allow {}
   }
 
-  # AWS Managed Rules — Common Rule Set
+  # AWS Managed Rules — Common Rule Set (COUNT mode: observe before enforcing)
   rule {
     name     = "AWSManagedRulesCommonRuleSet"
     priority = 10
 
     override_action {
-      none {}
+      count {}
     }
 
     statement {
@@ -184,13 +186,13 @@ resource "aws_wafv2_web_acl" "api" {
     }
   }
 
-  # AWS Managed Rules — Known Bad Inputs
+  # AWS Managed Rules — Known Bad Inputs (COUNT mode: observe before enforcing)
   rule {
     name     = "AWSManagedRulesKnownBadInputsRuleSet"
     priority = 20
 
     override_action {
-      none {}
+      count {}
     }
 
     statement {
@@ -207,13 +209,13 @@ resource "aws_wafv2_web_acl" "api" {
     }
   }
 
-  # AWS Managed Rules — Amazon IP Reputation List
+  # AWS Managed Rules — Amazon IP Reputation List (COUNT mode: observe before enforcing)
   rule {
     name     = "AWSManagedRulesAmazonIpReputationList"
     priority = 30
 
     override_action {
-      none {}
+      count {}
     }
 
     statement {
@@ -230,13 +232,13 @@ resource "aws_wafv2_web_acl" "api" {
     }
   }
 
-  # AWS Managed Rules — Anonymous IP List
+  # AWS Managed Rules — Anonymous IP List (COUNT mode: observe before enforcing)
   rule {
     name     = "AWSManagedRulesAnonymousIpList"
     priority = 35
 
     override_action {
-      none {}
+      count {}
     }
 
     statement {
