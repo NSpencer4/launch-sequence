@@ -32,7 +32,7 @@
 # }
 
 provider "aws" {
-  alias = var.aws_region
+  alias = "us_east_1"
   region = var.aws_region
 
   default_tags {

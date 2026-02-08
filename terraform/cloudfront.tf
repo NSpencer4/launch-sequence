@@ -84,6 +84,7 @@ resource "aws_cloudfront_distribution" "spa" {
   aliases = [var.domain_name, "www.${var.domain_name}"]
   price_class         = "PriceClass_100"
   wait_for_deployment = false
+  web_acl_id = aws_wafv2_web_acl.cloudfront.arn
 
   origin {
     domain_name              = aws_s3_bucket.spa.bucket_regional_domain_name

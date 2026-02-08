@@ -32,3 +32,8 @@ output "domain_url" {
   description = "Primary URL for the SPA"
   value       = "https://${var.domain_name}"
 }
+
+output "waf_web_acl_arn" {
+  description = "WAF WebACL ARN attached to CloudFront"
+  value       = aws_wafv2_web_acl.cloudfront.arn
+}
