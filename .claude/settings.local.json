@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm ls:*)",
+      "Bash(pnpm -r run build:*)",
+      "Bash(pnpm --filter @launch-sequence/launch-sequence-app run build:*)",
+      "Bash(pnpm --filter @launch-sequence/launch-sequence-app run lint)",
+      "Bash(pnpm --filter @launch-sequence/server run build:*)"
+    ]
+  }
+}

@@ -7,16 +7,16 @@
   "scripts": {
     "dev": "react-router dev",
     "build": "react-router build",
-    "preview": "yarn run build && vite preview",
+    "preview": "pnpm run build && vite preview",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "lint.fix": "eslint . --fix",
-    "deploy": "yarn run build && wrangler deploy",
-    "deploy:production": "yarn run build && wrangler deploy --env production",
-    "deploy:staging": "yarn run build && wrangler deploy --env staging",
+    "deploy": "pnpm run build && wrangler deploy",
+    "deploy:production": "pnpm run build && wrangler deploy --env production",
+    "deploy:staging": "pnpm run build && wrangler deploy --env staging",
     "typegen": "wrangler types",
-    "postinstall": "yarn run typegen",
-    "typecheck": "yarn run typegen && react-router typegen && tsc -b"
+    "postinstall": "pnpm run typegen",
+    "typecheck": "pnpm run typegen && react-router typegen && tsc -b"
   },
   "main": "build/index.js",
   "module": "build/index.es.js",
