@@ -1,0 +1,83 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-fix:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run syncpack fix
+        run: pnpm run syncpack:fix
+
+      - name: Run lint fix
+        run: pnpm run lint:all:fix
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No fixes needed"
+          else
+            git commit -m "style: auto-fix syncpack and lint issues"
+            git push
+          fi
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [ lint-fix ]
+    if: always() && (needs.lint-fix.result == 'success' || needs.lint-fix.result == 'skipped')
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Syncpack lint
+        run: pnpm run syncpack:lint
+
+      - name: Lint
+        run: pnpm run lint:all
+
+      - name: Build
+        run: pnpm run build:all
+
+      - name: Test
+        run: pnpm run test:all

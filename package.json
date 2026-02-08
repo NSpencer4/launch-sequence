@@ -2,31 +2,28 @@
   "name": "launch-sequence",
   "version": "0.0.1",
   "description": "The ultimate boolean manager",
-  "homepage": "https://github.com/NSpencer4/launch-sequence#readme",
-  "private": "true",
   "type": "module",
-  "bugs": {
-    "url": "https://github.com/NSpencer4/launch-sequence/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NSpencer4/launch-sequence.git"
-  },
-  "author": "",
+  "repository": "NSpencer4/launch-sequence.git",
   "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
   "scripts": {
     "audit:check": "pnpm audit --prod --audit-level moderate",
+    "build": "pnpm -r run build",
     "clean:deps": "pnpm -r exec rm -rf node_modules && rm -rf node_modules",
     "clean:reinstall:deps": "pnpm -r exec rm -rf node_modules && pnpm install",
-    "build": "pnpm -r run build",
-    "lint": "pnpm -r run lint",
-    "lint:fix": "pnpm -r run lint:fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "lint": "pnpm -r run lint",
+    "lint:fix": "pnpm -r run lint:fix",
+    "syncpack:fix": "syncpack fix-mismatches && syncpack format",
+    "syncpack:lint": "syncpack lint",
+    "syncpack:list": "syncpack list-mismatches",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^3.31.0",
+    "@emotion/react": "^11.14.0",
+    "react": "^19",
+    "react-dom": "^19"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
@@ -45,21 +42,22 @@
     "globals": "^15.9.0",
     "jiti": "^2.4.0",
     "prettier": "^3.8.0",
+    "syncpack": "^13.0.4",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.3.0",
     "vite": "^7",
     "vite-tsconfig-paths": "^6.0.4",
     "vitest": "^4.0.18"
   },
-  "dependencies": {
-    "@chakra-ui/react": "^3.31.0",
-    "@emotion/react": "^11.14.0",
-    "react": "^19",
-    "react-dom": "^19"
+  "author": "",
+  "bugs": "https://github.com/NSpencer4/launch-sequence/issues",
+  "directories": {
+    "doc": "docs"
   },
   "engines": {
     "node": ">=22"
   },
+  "homepage": "https://github.com/NSpencer4/launch-sequence#readme",
   "packageManager": "pnpm@10.4.1",
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -67,5 +65,6 @@
       "sharp",
       "workerd"
     ]
-  }
+  },
+  "private": "true"
 }
