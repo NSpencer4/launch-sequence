@@ -37,3 +37,37 @@ output "waf_web_acl_arn" {
   description = "WAF WebACL ARN attached to CloudFront"
   value       = aws_wafv2_web_acl.cloudfront.arn
 }
+
+# VPC outputs
+
+output "vpc_id" {
+  description = "VPC ID"
+  value       = aws_vpc.main.id
+}
+
+output "public_subnet_ids" {
+  description = "Public subnet IDs"
+  value       = aws_subnet.public[*].id
+}
+
+output "private_subnet_ids" {
+  description = "Private subnet IDs"
+  value       = aws_subnet.private[*].id
+}
+
+# API Gateway outputs
+
+output "api_gateway_url" {
+  description = "API Gateway invoke URL"
+  value       = aws_api_gateway_stage.main.invoke_url
+}
+
+output "api_gateway_id" {
+  description = "API Gateway REST API ID"
+  value       = aws_api_gateway_rest_api.main.id
+}
+
+output "waf_api_web_acl_arn" {
+  description = "WAF WebACL ARN attached to API Gateway"
+  value       = aws_wafv2_web_acl.api.arn
+}
