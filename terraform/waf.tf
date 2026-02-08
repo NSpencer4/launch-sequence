@@ -76,6 +76,29 @@ resource "aws_wafv2_web_acl" "cloudfront" {
     }
   }
 
+  # AWS Managed Rules — Anonymous IP List (VPNs, TOR, proxies)
+  rule {
+    name     = "AWSManagedRulesAnonymousIpList"
+    priority = 35
+
+    override_action {
+      none {}
+    }
+
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesAnonymousIpList"
+        vendor_name = "AWS"
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "AWSManagedRulesAnonymousIpList"
+      sampled_requests_enabled   = true
+    }
+  }
+
   # AWS Managed Rules — Bot Control (COUNT mode: observe before blocking)
   rule {
     name     = "AWSManagedRulesBotControlRuleSet"
