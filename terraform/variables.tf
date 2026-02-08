@@ -48,16 +48,16 @@ variable "nat_per_az" {
   }
 }
 
-variable "graphql_lambda_s3_key" {
-  description = "S3 key for the GraphQL Lambda deployment package"
-  type        = string
-  default     = "graphql/lambda.zip"
+variable "restrict_lambda_egress" {
+  description = "Restrict GraphQL Lambda egress to internal ALB + VPC endpoints only."
+  type        = bool
+  default     = false
 }
 
-variable "authorizer_lambda_s3_key" {
-  description = "S3 key for the Authorizer Lambda deployment package"
+variable "internal_alb_sg_id" {
+  description = "Security group ID for the internal ALB (used when restrict_lambda_egress is true)."
   type        = string
-  default     = "authorizer/lambda.zip"
+  default     = null
 }
 
 variable "cors_allowed_origin" {

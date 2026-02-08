@@ -1,36 +1,4 @@
 # ---------------------------------------------------------------------------
-# S3 Bucket — Lambda deployment packages
-# ---------------------------------------------------------------------------
-
-resource "aws_s3_bucket" "lambda_code" {
-  provider = aws.us_east_1
-  bucket   = "${var.project_name}-${var.environment}-lambda-code"
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-lambda-code"
-  }
-}
-
-resource "aws_s3_bucket_versioning" "lambda_code" {
-  provider = aws.us_east_1
-  bucket   = aws_s3_bucket.lambda_code.id
-
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "lambda_code" {
-  provider = aws.us_east_1
-  bucket   = aws_s3_bucket.lambda_code.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
-# ---------------------------------------------------------------------------
 # GraphQL Lambda — VPC-attached, behind API Gateway /graphql
 # ---------------------------------------------------------------------------
 
@@ -73,17 +41,46 @@ resource "aws_security_group" "graphql_lambda" {
   description = "Security group for GraphQL Lambda function"
   vpc_id      = aws_vpc.main.id
 
-  egress {
-    description = "All outbound traffic"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "egress" {
+    for_each = var.restrict_lambda_egress ? [] : [1]
+    content {
+      description = "All outbound traffic"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
 
   tags = {
     Name = "${var.project_name}-${var.environment}-graphql-lambda"
   }
+}
+
+resource "aws_security_group_rule" "graphql_lambda_to_vpc_endpoints_https" {
+  provider = aws.us_east_1
+  count    = var.restrict_lambda_egress ? 1 : 0
+
+  type                     = "egress"
+  security_group_id        = aws_security_group.graphql_lambda.id
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.vpc_endpoints.id
+  description              = "HTTPS to VPC interface endpoints"
+}
+
+resource "aws_security_group_rule" "graphql_lambda_to_internal_alb_https" {
+  provider = aws.us_east_1
+  count    = var.restrict_lambda_egress && var.internal_alb_sg_id != null ? 1 : 0
+
+  type                     = "egress"
+  security_group_id        = aws_security_group.graphql_lambda.id
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  source_security_group_id = var.internal_alb_sg_id
+  description              = "HTTPS to internal ALB"
 }
 
 resource "aws_lambda_function" "graphql" {
@@ -95,9 +92,10 @@ resource "aws_lambda_function" "graphql" {
   handler       = "index.handler"
   timeout       = 30
   memory_size   = 256
+  publish = true
 
-  s3_bucket = aws_s3_bucket.lambda_code.id
-  s3_key    = var.graphql_lambda_s3_key
+  filename = "${path.module}/../packages/lambdas/graphql/dist/lambda.zip"
+  source_code_hash = filebase64sha256("${path.module}/../packages/lambdas/graphql/dist/lambda.zip")
 
   vpc_config {
     subnet_ids = aws_subnet.private[*].id
@@ -107,6 +105,15 @@ resource "aws_lambda_function" "graphql" {
   tags = {
     Name = "${var.project_name}-${var.environment}-graphql"
   }
+}
+
+resource "aws_lambda_alias" "graphql_live" {
+  provider = aws.us_east_1
+
+  name             = "live"
+  description      = "Stable alias for GraphQL Lambda"
+  function_name    = aws_lambda_function.graphql.function_name
+  function_version = aws_lambda_function.graphql.version
 }
 
 resource "aws_cloudwatch_log_group" "graphql_lambda" {
@@ -125,9 +132,9 @@ resource "aws_lambda_permission" "graphql_apigw" {
 
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.graphql.function_name
+  function_name = aws_lambda_alias.graphql_live.arn
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.main.execution_arn}/*/*"
+  source_arn    = "${aws_api_gateway_rest_api.main.execution_arn}/${aws_api_gateway_stage.main.stage_name}/${aws_api_gateway_method.graphql_post.http_method}${aws_api_gateway_resource.graphql.path}"
 }
 
 # ---------------------------------------------------------------------------
@@ -170,8 +177,8 @@ resource "aws_lambda_function" "authorizer" {
   timeout       = 10
   memory_size   = 128
 
-  s3_bucket = aws_s3_bucket.lambda_code.id
-  s3_key    = var.authorizer_lambda_s3_key
+  filename = "${path.module}/../packages/lambdas/authorizer/dist/lambda.zip"
+  source_code_hash = filebase64sha256("${path.module}/../packages/lambdas/authorizer/dist/lambda.zip")
 
   tags = {
     Name = "${var.project_name}-${var.environment}-authorizer"

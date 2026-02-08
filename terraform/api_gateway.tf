@@ -186,7 +186,7 @@ resource "aws_api_gateway_integration" "graphql_post" {
   http_method             = aws_api_gateway_method.graphql_post.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.graphql.invoke_arn
+  uri = aws_lambda_alias.graphql_live.invoke_arn
 }
 
 # ---------------------------------------------------------------------------
