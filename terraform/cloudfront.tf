@@ -26,19 +26,17 @@ resource "aws_cloudfront_cache_policy" "hashed_assets" {
   }
 }
 
-# Index.html caching. Always revalidate so deploys are picked up immediately.
+# Always revalidate so deploys are picked up immediately.
 # Deploy must set Cache-Control on S3 objects to align with these policies:
 #   index.html:  Cache-Control: no-cache
 #   /assets/*:   Cache-Control: public, max-age=31536000, immutable
-resource "aws_cloudfront_cache_policy" "default_short" {
-  name        = "${var.project_name}-${var.environment}-default-short"
+resource "aws_cloudfront_cache_policy" "html_no_cache" {
+  name = "${var.project_name}-${var.environment}-html-no-cache"
   default_ttl = 0
   max_ttl     = 0
   min_ttl     = 0
 
   parameters_in_cache_key_and_forwarded_to_origin {
-    # Ensure cache hits
-
     cookies_config {
       cookie_behavior = "none"
     }
@@ -49,6 +47,35 @@ resource "aws_cloudfront_cache_policy" "default_short" {
       query_string_behavior = "none"
     }
   }
+}
+
+# Short cache for misc static files (favicon.ico, robots.txt, manifest.webmanifest, etc.)
+resource "aws_cloudfront_cache_policy" "static_short" {
+  name        = "${var.project_name}-${var.environment}-static-short"
+  default_ttl = 60
+  max_ttl     = 300
+  min_ttl     = 0
+
+  parameters_in_cache_key_and_forwarded_to_origin {
+    cookies_config {
+      cookie_behavior = "none"
+    }
+    headers_config {
+      header_behavior = "none"
+    }
+    query_strings_config {
+      query_string_behavior = "none"
+    }
+  }
+}
+
+# AWS managed policies
+data "aws_cloudfront_origin_request_policy" "cors_s3" {
+  name = "Managed-CORS-S3Origin"
+}
+
+data "aws_cloudfront_response_headers_policy" "security_headers" {
+  name = "Managed-SecurityHeadersPolicy"
 }
 
 resource "aws_cloudfront_distribution" "spa" {
@@ -66,20 +93,37 @@ resource "aws_cloudfront_distribution" "spa" {
   default_cache_behavior {
     allowed_methods = ["GET", "HEAD", "OPTIONS"]
     cached_methods = ["GET", "HEAD"]
-    target_origin_id       = "s3-spa"
-    cache_policy_id        = aws_cloudfront_cache_policy.default_short.id
-    viewer_protocol_policy = "redirect-to-https"
-    compress               = true
+    target_origin_id           = "s3-spa"
+    cache_policy_id            = aws_cloudfront_cache_policy.static_short.id
+    origin_request_policy_id   = data.aws_cloudfront_origin_request_policy.cors_s3.id
+    response_headers_policy_id = data.aws_cloudfront_response_headers_policy.security_headers.id
+    viewer_protocol_policy     = "redirect-to-https"
+    compress                   = true
+  }
+
+  # SPA entrypoint — always revalidate so deploys are instant
+  ordered_cache_behavior {
+    path_pattern               = "/index.html"
+    allowed_methods = ["GET", "HEAD", "OPTIONS"]
+    cached_methods = ["GET", "HEAD"]
+    target_origin_id           = "s3-spa"
+    cache_policy_id            = aws_cloudfront_cache_policy.html_no_cache.id
+    origin_request_policy_id   = data.aws_cloudfront_origin_request_policy.cors_s3.id
+    response_headers_policy_id = data.aws_cloudfront_response_headers_policy.security_headers.id
+    viewer_protocol_policy     = "redirect-to-https"
+    compress                   = true
   }
 
   ordered_cache_behavior {
-    path_pattern           = "/assets/*"
+    path_pattern               = "/assets/*"
     allowed_methods = ["GET", "HEAD", "OPTIONS"]
     cached_methods = ["GET", "HEAD"]
-    target_origin_id       = "s3-spa"
-    cache_policy_id        = aws_cloudfront_cache_policy.hashed_assets.id
-    viewer_protocol_policy = "redirect-to-https"
-    compress               = true
+    target_origin_id           = "s3-spa"
+    cache_policy_id            = aws_cloudfront_cache_policy.hashed_assets.id
+    origin_request_policy_id   = data.aws_cloudfront_origin_request_policy.cors_s3.id
+    response_headers_policy_id = data.aws_cloudfront_response_headers_policy.security_headers.id
+    viewer_protocol_policy     = "redirect-to-https"
+    compress                   = true
   }
 
   custom_error_response {
