@@ -76,13 +76,13 @@ resource "aws_wafv2_web_acl" "cloudfront" {
     }
   }
 
-  # AWS Managed Rules — Bot Control
+  # AWS Managed Rules — Bot Control (COUNT mode: observe before blocking)
   rule {
     name     = "AWSManagedRulesBotControlRuleSet"
     priority = 40
 
     override_action {
-      none {}
+      count {}
     }
 
     statement {
@@ -99,7 +99,7 @@ resource "aws_wafv2_web_acl" "cloudfront" {
     }
   }
 
-  # Rate limiting — 1000 requests per 5-minute window
+  # Rate limiting — 10 000 requests per 5-minute window, excluding cached assets
   rule {
     name     = "RateLimitRule"
     priority = 50
@@ -110,8 +110,26 @@ resource "aws_wafv2_web_acl" "cloudfront" {
 
     statement {
       rate_based_statement {
-        limit              = 1000
+        limit = 10000
         aggregate_key_type = "IP"
+
+        scope_down_statement {
+          not_statement {
+            statement {
+              byte_match_statement {
+                search_string         = "/assets/"
+                positional_constraint = "STARTS_WITH"
+                field_to_match {
+                  uri_path {}
+                }
+                text_transformation {
+                  priority = 0
+                  type     = "NONE"
+                }
+              }
+            }
+          }
+        }
       }
     }
 
