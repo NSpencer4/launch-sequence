@@ -170,43 +170,43 @@ jobs:
           echo "s3_bucket=$(terraform output -raw s3_bucket_name)" >> "$GITHUB_OUTPUT"
           echo "distribution_id=$(terraform output -raw cloudfront_distribution_id)" >> "$GITHUB_OUTPUT"
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [ terraform ]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
-    permissions:
-      id-token: write
-      contents: read
-
-    steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: us-east-1
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: spa-dist
-          path: dist
-
-      - name: Sync hashed assets to S3
-        run: |
-          aws s3 sync dist/assets "s3://${{ needs.terraform.outputs.s3_bucket }}/assets" \
-            --cache-control "public, max-age=31536000, immutable" \
-            --delete
-
-      - name: Sync remaining files to S3
-        run: |
-          aws s3 sync dist "s3://${{ needs.terraform.outputs.s3_bucket }}" \
-            --cache-control "no-cache" \
-            --exclude "assets/*" \
-            --delete
-
-      - name: Invalidate CloudFront cache
-        run: |
-          aws cloudfront create-invalidation \
-            --distribution-id "${{ needs.terraform.outputs.distribution_id }}" \
-            --paths "/index.html"
+#  deploy:
+#    runs-on: ubuntu-latest
+#    needs: [ terraform ]
+#    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+#
+#    permissions:
+#      id-token: write
+#      contents: read
+#
+#    steps:
+#      - name: Configure AWS credentials
+#        uses: aws-actions/configure-aws-credentials@v4
+#        with:
+#          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+#          aws-region: us-east-1
+#
+#      - name: Download build artifacts
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: spa-dist
+#          path: dist
+#
+#      - name: Sync hashed assets to S3
+#        run: |
+#          aws s3 sync dist/assets "s3://${{ needs.terraform.outputs.s3_bucket }}/assets" \
+#            --cache-control "public, max-age=31536000, immutable" \
+#            --delete
+#
+#      - name: Sync remaining files to S3
+#        run: |
+#          aws s3 sync dist "s3://${{ needs.terraform.outputs.s3_bucket }}" \
+#            --cache-control "no-cache" \
+#            --exclude "assets/*" \
+#            --delete
+#
+#      - name: Invalidate CloudFront cache
+#        run: |
+#          aws cloudfront create-invalidation \
+#            --distribution-id "${{ needs.terraform.outputs.distribution_id }}" \
+#            --paths "/index.html"
