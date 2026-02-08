@@ -15,3 +15,9 @@ variable "aws_region" {
   type        = string
   default     = "us-east-1"
 }
+
+variable "domain_name" {
+  description = "Primary domain name for the SPA"
+  type        = string
+  default     = "launchsequence.dev"
+}

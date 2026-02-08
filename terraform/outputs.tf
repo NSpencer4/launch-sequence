@@ -22,3 +22,13 @@ output "s3_bucket_arn" {
   description = "S3 bucket ARN"
   value       = aws_s3_bucket.spa.arn
 }
+
+output "nameservers" {
+  description = "Nameservers to configure at your domain registrar"
+  value       = aws_route53_zone.main.name_servers
+}
+
+output "domain_url" {
+  description = "Primary URL for the SPA"
+  value       = "https://${var.domain_name}"
+}

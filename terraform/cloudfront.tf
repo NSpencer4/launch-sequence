@@ -81,6 +81,7 @@ data "aws_cloudfront_response_headers_policy" "security_headers" {
 resource "aws_cloudfront_distribution" "spa" {
   enabled             = true
   default_root_object = "index.html"
+  aliases = [var.domain_name, "www.${var.domain_name}"]
   price_class         = "PriceClass_100"
   wait_for_deployment = false
 
@@ -147,6 +148,8 @@ resource "aws_cloudfront_distribution" "spa" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn      = aws_acm_certificate_validation.spa.certificate_arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 }
