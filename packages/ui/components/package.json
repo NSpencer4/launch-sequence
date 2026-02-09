@@ -5,8 +5,8 @@
   "private": "true",
   "type": "module",
   "scripts": {
-    "build": "storybook build",
-    "dev": "storybook dev -p 6006",
+    "build": "echo \"Error: no code yet\" && exit 0",
+    "dev": "echo \"Error: no code yet\" && exit 0",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "echo \"Error: no code yet\" && exit 0",
     "lint:fix": "echo \"Error: no code yet\" && exit 0",
