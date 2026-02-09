@@ -14,7 +14,7 @@ const config = defineConfig(
   ...tseslint.configs.recommended,
 
   // Prettier compatibility (disables conflicting rules)
-  eslintPluginPrettierRecommended,
+  eslintPluginPrettierRecommended.default ?? eslintPluginPrettierRecommended,
 
   // Override default ignores of eslint-config-next.
   globalIgnores([
@@ -37,6 +37,7 @@ const config = defineConfig(
       '**/coverage/**',
       '**/*.d.ts',
       '**/docker/**',
+      '**/eslint.config.ts',
     ],
   },
 
@@ -87,7 +88,14 @@ const config = defineConfig(
   // React (TSX) files — hooks and refresh plugins, browser globals
   {
     files: ['**/*.tsx'],
-    extends: [reactHooks.configs['recommended-latest'], reactRefresh.configs.vite],
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    },
     languageOptions: {
       globals: globals.browser,
     },

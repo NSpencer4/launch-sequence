@@ -1,6 +1,6 @@
 /**
  * Authentication Types
- * 
+ *
  * Types for Supabase auth-only operations.
  * For data types, see src/lib/graphql/types.ts
  */

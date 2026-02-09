@@ -1,10 +1,10 @@
-import { Box, Input } from "@chakra-ui/react";
+import { Box, Input } from '@chakra-ui/react'
 import type { SearchInputProps } from './SearchInput.types'
 
 export default function SearchInput({
   value,
   onChange,
-  placeholder = "Search...",
+  placeholder = 'Search...',
 }: SearchInputProps) {
   return (
     <Box position="relative" flex="1">
@@ -40,12 +40,12 @@ export default function SearchInput({
         letterSpacing="widest"
         color="typography.secondary"
         transition="all 0.2s ease"
-        _placeholder={{ color: "functional.grey4" }}
+        _placeholder={{ color: 'functional.grey4' }}
         _focus={{
-          outline: "none",
-          borderColor: "brand.primary",
+          outline: 'none',
+          borderColor: 'brand.primary',
         }}
       />
     </Box>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex } from '@chakra-ui/react'
 import type { PaginationProps } from './Pagination.types'
 
 export default function Pagination({
@@ -7,9 +7,9 @@ export default function Pagination({
   itemsPerPage,
   onPageChange,
 }: PaginationProps) {
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const startItem = (currentPage - 1) * itemsPerPage + 1;
-  const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+  const totalPages = Math.ceil(totalItems / itemsPerPage)
+  const startItem = (currentPage - 1) * itemsPerPage + 1
+  const endItem = Math.min(currentPage * itemsPerPage, totalItems)
 
   return (
     <Flex
@@ -29,7 +29,7 @@ export default function Pagination({
           bg="none"
           border="none"
           p="1"
-          cursor={currentPage <= 1 ? "not-allowed" : "pointer"}
+          cursor={currentPage <= 1 ? 'not-allowed' : 'pointer'}
           color="functional.grey3"
           transition="all 0.2s ease"
           display="flex"
@@ -37,14 +37,10 @@ export default function Pagination({
           justifyContent="center"
           opacity={currentPage <= 1 ? 0.3 : 1}
           _hover={{
-            color: currentPage <= 1 ? "functional.grey3" : "brand.primary",
+            color: currentPage <= 1 ? 'functional.grey3' : 'brand.primary',
           }}
         >
-          <Box
-            as="span"
-            className="material-symbols-outlined"
-            fontSize="14px"
-          >
+          <Box as="span" className="material-symbols-outlined" fontSize="14px">
             chevron_left
           </Box>
         </Box>
@@ -58,7 +54,7 @@ export default function Pagination({
           bg="none"
           border="none"
           p="1"
-          cursor={currentPage >= totalPages ? "not-allowed" : "pointer"}
+          cursor={currentPage >= totalPages ? 'not-allowed' : 'pointer'}
           color="functional.grey3"
           transition="all 0.2s ease"
           display="flex"
@@ -66,18 +62,14 @@ export default function Pagination({
           justifyContent="center"
           opacity={currentPage >= totalPages ? 0.3 : 1}
           _hover={{
-            color: currentPage >= totalPages ? "functional.grey3" : "brand.primary",
+            color: currentPage >= totalPages ? 'functional.grey3' : 'brand.primary',
           }}
         >
-          <Box
-            as="span"
-            className="material-symbols-outlined"
-            fontSize="14px"
-          >
+          <Box as="span" className="material-symbols-outlined" fontSize="14px">
             chevron_right
           </Box>
         </Box>
       </Flex>
     </Flex>
-  );
+  )
 }

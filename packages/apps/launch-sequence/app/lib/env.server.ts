@@ -1,6 +1,6 @@
 /**
  * Server-side environment helpers for Cloudflare Workers
- * 
+ *
  * Use these helpers in loaders and actions to access environment variables
  * from the Cloudflare Workers context.
  */
