@@ -49,7 +49,7 @@ jobs:
         run: pnpm run syncpack:fix
 
       - name: Run lint fix
-        run: pnpm run lint:all:fix
+        run: pnpm run lint:fix
 
       - name: Commit changes
         run: |
@@ -102,13 +102,13 @@ jobs:
         run: pnpm run syncpack:lint
 
       - name: Lint
-        run: pnpm run lint:all
+        run: pnpm run lint
 
       - name: Build
-        run: pnpm run build:all
+        run: pnpm run build
 
       - name: Test
-        run: pnpm run test:all
+        run: pnpm run test
 
       - name: Upload SPA artifacts
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
