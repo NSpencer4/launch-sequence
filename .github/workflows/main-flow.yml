@@ -9,7 +9,7 @@ on:
 jobs:
   lint-fix:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false
 
     steps:
       - uses: actions/checkout@v4
@@ -82,12 +82,28 @@ jobs:
       - name: Test
         run: pnpm run test:all
 
-      - name: Upload build artifacts
+      - name: Build Lambda zips
+        run: |
+          pnpm --filter @launch-sequence/graphql-lambda run build
+          pnpm --filter @launch-sequence/graphql-lambda run zip
+          pnpm --filter @launch-sequence/authorizer-lambda run build
+          pnpm --filter @launch-sequence/authorizer-lambda run zip
+
+      - name: Upload SPA artifacts
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: actions/upload-artifact@v4
         with:
           name: spa-dist
           path: packages/apps/launch-sequence/dist
+          retention-days: 1
+
+      - name: Upload Lambda artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: lambda-zips
+          path: |
+            packages/lambdas/graphql/dist/lambda.zip
+            packages/lambdas/authorizer/dist/lambda.zip
           retention-days: 1
 
   terraform:
@@ -107,6 +123,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Download Lambda artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: lambda-zips
+          path: packages/lambdas
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -201,12 +223,16 @@ jobs:
 #      - name: Sync remaining files to S3
 #        run: |
 #          aws s3 sync dist "s3://${{ needs.terraform.outputs.s3_bucket }}" \
-#            --cache-control "no-cache" \
+#            --cache-control "public, max-age=300" \
 #            --exclude "assets/*" \
+#            --exclude "index.html" \
 #            --delete
+#
+#          aws s3 cp dist/index.html "s3://${{ needs.terraform.outputs.s3_bucket }}/index.html" \
+#            --cache-control "no-store"
 #
 #      - name: Invalidate CloudFront cache
 #        run: |
 #          aws cloudfront create-invalidation \
 #            --distribution-id "${{ needs.terraform.outputs.distribution_id }}" \
-#            --paths "/index.html"
+#            --paths "/index.html" "/"
