@@ -1,1 +1,1 @@
-export { default } from '../../../packages/ui/eslint.config.ts'
+export { default } from '../../ui/eslint.config'
