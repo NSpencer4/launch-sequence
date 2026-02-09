@@ -10,7 +10,8 @@
       "Bash(terraform fmt:*)",
       "Bash(terraform validate:*)",
       "Bash(terraform init:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(pnpm -r run lint:fix:*)"
     ]
   }
 }
