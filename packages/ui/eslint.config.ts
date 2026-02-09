@@ -1,8 +1,10 @@
 import tseslint from 'typescript-eslint'
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
 import { defineConfig, globalIgnores } from 'eslint/config'
-import eslint from "@eslint/js";
+import eslint from '@eslint/js'
 
 const config = defineConfig(
     // Base ESLint recommended rules
@@ -17,6 +19,7 @@ const config = defineConfig(
     // Override default ignores of eslint-config-next.
     globalIgnores([
         // Default ignores of eslint-config-next:
+      'dist',
         '.next/**',
         'out/**',
         'build/**',
@@ -78,6 +81,15 @@ const config = defineConfig(
             'prefer-const': 'error',
             'prefer-template': 'warn',
             'object-shorthand': 'warn',
+        },
+    },
+
+    // React (TSX) files — hooks and refresh plugins, browser globals
+    {
+        files: ['**/*.tsx'],
+        extends: [reactHooks.configs['recommended-latest'], reactRefresh.configs.vite],
+        languageOptions: {
+            globals: globals.browser,
         },
     },
 

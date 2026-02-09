@@ -11,7 +11,10 @@
       "Bash(terraform validate:*)",
       "Bash(terraform init:*)",
       "Bash(find:*)",
-      "Bash(pnpm -r run lint:fix:*)"
+      "Bash(pnpm -r run lint:fix:*)",
+      "Bash(pnpm --filter @launch-sequence/ui run lint:fix:*)",
+      "Bash(pnpm --filter @launch-sequence/storybook run lint)",
+      "Bash(npx eslint:*)"
     ]
   }
 }
