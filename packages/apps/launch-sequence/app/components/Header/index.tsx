@@ -1,16 +1,12 @@
-import { Box, Flex } from "@chakra-ui/react";
-import { HeaderProps } from "./Header.types";
-import Icon from "../Icon";
+import { Box, Flex } from '@chakra-ui/react'
+import type { HeaderProps } from './Header.types'
+import Icon from '../Icon'
 
-const defaultEnvironments = [
-  "PRODUCTION_GLOBAL",
-  "STAGING_US_EAST",
-  "DEV_LOCAL",
-];
+const defaultEnvironments = ['PRODUCTION_GLOBAL', 'STAGING_US_EAST', 'DEV_LOCAL']
 
 export default function Header({
   stats = { totalFlags: 1248, activeFlags: 912 },
-  environment = "PRODUCTION_GLOBAL",
+  environment = 'PRODUCTION_GLOBAL',
   environments = defaultEnvironments,
   onEnvironmentChange,
   onCreateFlag,
@@ -64,12 +60,7 @@ export default function Header({
           >
             Active Flags
           </Box>
-          <Box
-            as="span"
-            fontFamily="display"
-            fontSize="2xl"
-            color="typography.secondary"
-          >
+          <Box as="span" fontFamily="display" fontSize="2xl" color="typography.secondary">
             {stats.activeFlags.toLocaleString()}
           </Box>
         </Flex>
@@ -108,10 +99,10 @@ export default function Header({
             fontSize="md"
             p="0"
             cursor="pointer"
-            _focus={{ outline: "none" }}
+            _focus={{ outline: 'none' }}
             css={{
-              "& option": {
-                background: "#060b18",
+              '& option': {
+                background: '#060b18',
               },
             }}
           >
@@ -134,7 +125,7 @@ export default function Header({
           cursor="pointer"
           color="functional.grey3"
           transition="all 0.2s ease"
-          _hover={{ color: "brand.primary" }}
+          _hover={{ color: 'brand.primary' }}
         >
           <Icon name="settings" size="md" />
         </Box>
@@ -154,12 +145,12 @@ export default function Header({
           letterSpacing="widest"
           cursor="pointer"
           transition="all 0.2s ease"
-          _hover={{ boxShadow: "neonGold" }}
+          _hover={{ boxShadow: 'neonGold' }}
         >
           <Icon name="add_circle" size="sm" />
           CREATE NEW FLAG
         </Flex>
       </Flex>
     </Flex>
-  );
+  )
 }

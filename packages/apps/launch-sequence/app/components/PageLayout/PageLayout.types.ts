@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
-import { NavItem } from "../SideBar/SideBar.types";
+import type { ReactNode } from 'react'
+import type { NavItem } from '../SideBar/SideBar.types'
 
 export type PageLayoutProps = {
-  children: ReactNode;
-  activeNavItem?: NavItem;
-};
+  children: ReactNode
+  activeNavItem?: NavItem
+}

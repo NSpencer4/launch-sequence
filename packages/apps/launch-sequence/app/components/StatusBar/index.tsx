@@ -1,31 +1,26 @@
-import { Box, Flex } from "@chakra-ui/react";
-import { StatusBarProps } from "./StatusBar.types";
+import { Box, Flex } from '@chakra-ui/react'
+import type { StatusBarProps } from './StatusBar.types'
 
 export default function StatusBar({
-  syncStatus = "operational",
+  syncStatus = 'operational',
   showKeyboardShortcuts = true,
 }: StatusBarProps) {
   const statusLabels = {
-    operational: "Live Sync Status: OPERATIONAL",
-    syncing: "Live Sync Status: SYNCING",
-    error: "Live Sync Status: ERROR",
-  };
+    operational: 'Live Sync Status: OPERATIONAL',
+    syncing: 'Live Sync Status: SYNCING',
+    error: 'Live Sync Status: ERROR',
+  }
 
   const statusColors = {
-    operational: "brand.primary",
-    syncing: "brand.secondary",
-    error: "status.error",
-  };
+    operational: 'brand.primary',
+    syncing: 'brand.secondary',
+    error: 'status.error',
+  }
 
   return (
     <Flex align="center" gap="6">
       <Flex align="center" gap="2">
-        <Box
-          w="8px"
-          h="8px"
-          borderRadius="full"
-          bg={statusColors[syncStatus]}
-        />
+        <Box w="8px" h="8px" borderRadius="full" bg={statusColors[syncStatus]} />
         <Box
           as="span"
           fontFamily="display"
@@ -61,5 +56,5 @@ export default function StatusBar({
         </Flex>
       )}
     </Flex>
-  );
+  )
 }

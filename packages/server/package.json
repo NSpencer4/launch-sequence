@@ -16,11 +16,16 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.0.0",
     "@aws-sdk/client-secrets-manager": "^3.0.0",
+    "@aws-sdk/lib-dynamodb": "^3.0.0",
     "@supabase/supabase-js": "^2.39.0",
     "drizzle-orm": "^0.45.1",
     "kafkajs": "^2.2.4",
     "pg": "^8.17.2"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.16.0"
   },
   "private": "true"
 }

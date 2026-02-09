@@ -1,15 +1,15 @@
-import { Box, Flex, VStack } from "@chakra-ui/react";
-import { SideBarProps, NavItemConfig } from "./SideBar.types";
+import { Box, Flex, VStack } from '@chakra-ui/react'
+import type { SideBarProps, NavItemConfig } from './SideBar.types'
 
 const navItems: NavItemConfig[] = [
-  { id: "dashboard", label: "Dashboard", icon: "dashboard", href: "/" },
-  { id: "flag-explorer", label: "Flags Index", icon: "list_alt", href: "/flags" },
-  { id: "applications", label: "Applications", icon: "apps", href: "/applications" },
-  { id: "experiments", label: "Experiments", icon: "science", href: "/experiments" },
-  { id: "audit-logs", label: "Audit Logs", icon: "history_edu", href: "/audit-logs" },
-];
+  { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', href: '/' },
+  { id: 'flag-explorer', label: 'Flags Index', icon: 'list_alt', href: '/flags' },
+  { id: 'applications', label: 'Applications', icon: 'apps', href: '/applications' },
+  { id: 'experiments', label: 'Experiments', icon: 'science', href: '/experiments' },
+  { id: 'audit-logs', label: 'Audit Logs', icon: 'history_edu', href: '/audit-logs' },
+]
 
-export default function SideBar({ activeItem = "dashboard" }: SideBarProps) {
+export default function SideBar({ activeItem = 'dashboard' }: SideBarProps) {
   return (
     <Flex
       as="aside"
@@ -44,14 +44,17 @@ export default function SideBar({ activeItem = "dashboard" }: SideBarProps) {
           letterSpacing="tighter"
           color="typography.secondary"
         >
-          LAUNCH<Box as="span" color="brand.primary">SEQUENCE</Box>
+          LAUNCH
+          <Box as="span" color="brand.primary">
+            SEQUENCE
+          </Box>
         </Box>
       </Flex>
 
       {/* Navigation Section */}
       <VStack as="nav" flex="1" gap="2" align="stretch">
         {navItems.map((item) => {
-          const isActive = activeItem === item.id;
+          const isActive = activeItem === item.id
           return (
             <Box
               key={item.id}
@@ -66,12 +69,12 @@ export default function SideBar({ activeItem = "dashboard" }: SideBarProps) {
               textDecoration="none"
               transition="all 0.2s ease"
               borderLeft="2px solid"
-              color={isActive ? "brand.primary" : "functional.grey3"}
-              bg={isActive ? "rgba(0, 242, 255, 0.1)" : "transparent"}
-              borderLeftColor={isActive ? "brand.primary" : "transparent"}
+              color={isActive ? 'brand.primary' : 'functional.grey3'}
+              bg={isActive ? 'rgba(0, 242, 255, 0.1)' : 'transparent'}
+              borderLeftColor={isActive ? 'brand.primary' : 'transparent'}
               _hover={{
-                color: "brand.primary",
-                bg: isActive ? "rgba(0, 242, 255, 0.1)" : "rgba(0, 242, 255, 0.05)",
+                color: 'brand.primary',
+                bg: isActive ? 'rgba(0, 242, 255, 0.1)' : 'rgba(0, 242, 255, 0.05)',
               }}
             >
               <Box as="span" className="material-symbols-outlined" fontSize="20px">
@@ -87,19 +90,13 @@ export default function SideBar({ activeItem = "dashboard" }: SideBarProps) {
                 {item.label}
               </Box>
             </Box>
-          );
+          )
         })}
       </VStack>
 
       {/* User Section */}
       <Box mt="auto" pt="6" borderTop="1px solid" borderColor="border.dark">
-        <Flex
-          align="center"
-          gap="3"
-          p="2"
-          bg="rgba(15, 23, 42, 0.5)"
-          borderRadius="sm"
-        >
+        <Flex align="center" gap="3" p="2" bg="rgba(15, 23, 42, 0.5)" borderRadius="sm">
           <Flex
             w="8"
             h="8"
@@ -140,5 +137,5 @@ export default function SideBar({ activeItem = "dashboard" }: SideBarProps) {
         </Flex>
       </Box>
     </Flex>
-  );
+  )
 }

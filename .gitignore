@@ -58,3 +58,6 @@ docker/localstack
 storybook-static
 
 designs
+
+.claude
+.output.txt

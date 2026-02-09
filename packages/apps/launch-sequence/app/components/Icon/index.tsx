@@ -1,15 +1,15 @@
-import { Box } from "@chakra-ui/react";
-import { IconProps } from "./Icon.types";
+import { Box } from '@chakra-ui/react'
+import type { IconProps } from './Icon.types'
 
 const sizeMap = {
-  xs: "14px",
-  sm: "18px",
-  md: "20px",
-  lg: "24px",
-  xl: "32px",
-};
+  xs: '14px',
+  sm: '18px',
+  md: '20px',
+  lg: '24px',
+  xl: '32px',
+}
 
-export default function Icon({ name, size = "md", className = "" }: IconProps) {
+export default function Icon({ name, size = 'md', className = '' }: IconProps) {
   return (
     <Box
       as="span"
@@ -20,5 +20,5 @@ export default function Icon({ name, size = "md", className = "" }: IconProps) {
     >
       {name}
     </Box>
-  );
+  )
 }

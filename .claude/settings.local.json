@@ -6,7 +6,15 @@
       "Bash(pnpm --filter @launch-sequence/launch-sequence-app run build:*)",
       "Bash(pnpm --filter @launch-sequence/launch-sequence-app run lint)",
       "Bash(pnpm --filter @launch-sequence/server run build:*)",
-      "Bash(node -e:*)"
+      "Bash(node -e:*)",
+      "Bash(terraform fmt:*)",
+      "Bash(terraform validate:*)",
+      "Bash(terraform init:*)",
+      "Bash(find:*)",
+      "Bash(pnpm -r run lint:fix:*)",
+      "Bash(pnpm --filter @launch-sequence/ui run lint:fix:*)",
+      "Bash(pnpm --filter @launch-sequence/storybook run lint)",
+      "Bash(npx eslint:*)"
     ]
   }
 }

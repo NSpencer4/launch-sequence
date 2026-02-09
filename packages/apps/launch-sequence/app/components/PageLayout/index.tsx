@@ -1,11 +1,8 @@
-import { Box, Flex } from "@chakra-ui/react";
-import { PageLayoutProps } from "./PageLayout.types";
-import SideBar from "../SideBar";
+import { Box, Flex } from '@chakra-ui/react'
+import type { PageLayoutProps } from './PageLayout.types'
+import SideBar from '../SideBar'
 
-export default function PageLayout({
-  children,
-  activeNavItem = "dashboard",
-}: PageLayoutProps) {
+export default function PageLayout({ children, activeNavItem = 'dashboard' }: PageLayoutProps) {
   return (
     <Flex
       h="100vh"
@@ -53,5 +50,5 @@ export default function PageLayout({
         />
       </Box>
     </Flex>
-  );
+  )
 }

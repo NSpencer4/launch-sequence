@@ -1,5 +1,5 @@
 export type SearchInputProps = {
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-};
+  value: string
+  onChange: (value: string) => void
+  placeholder?: string
+}

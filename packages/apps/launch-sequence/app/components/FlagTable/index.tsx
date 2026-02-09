@@ -1,7 +1,7 @@
-import { Box, Flex, Table } from "@chakra-ui/react";
-import { FlagTableProps } from "./FlagTable.types";
-import Toggle from "../Toggle";
-import Tag from "../Tag";
+import { Box, Flex, Table } from '@chakra-ui/react'
+import type { FlagTableProps } from './FlagTable.types'
+import Toggle from '../Toggle'
+import Tag from '../Tag'
 
 export default function FlagTable({
   flags,
@@ -11,7 +11,7 @@ export default function FlagTable({
   onToggleFlag,
   onFlagClick,
 }: FlagTableProps) {
-  const allSelected = flags.length > 0 && selectedIds.length === flags.length;
+  const allSelected = flags.length > 0 && selectedIds.length === flags.length
 
   return (
     <Box
@@ -21,15 +21,15 @@ export default function FlagTable({
       borderColor="border.primary"
       bg="background.cardAlt"
       css={{
-        "&::-webkit-scrollbar": {
-          width: "4px",
+        '&::-webkit-scrollbar': {
+          width: '4px',
         },
-        "&::-webkit-scrollbar-track": {
-          background: "rgba(0, 0, 0, 0.2)",
+        '&::-webkit-scrollbar-track': {
+          background: 'rgba(0, 0, 0, 0.2)',
         },
-        "&::-webkit-scrollbar-thumb": {
-          background: "rgba(0, 242, 255, 0.3)",
-          borderRadius: "10px",
+        '&::-webkit-scrollbar-thumb': {
+          background: 'rgba(0, 242, 255, 0.3)',
+          borderRadius: '10px',
         },
       }}
     >
@@ -70,12 +70,12 @@ export default function FlagTable({
                 cursor="pointer"
                 transition="all 0.2s ease"
                 css={{
-                  "&:checked": {
-                    background: "#00f2ff",
-                    borderColor: "#00f2ff",
+                  '&:checked': {
+                    background: '#00f2ff',
+                    borderColor: '#00f2ff',
                   },
-                  "&:focus": {
-                    outline: "none",
+                  '&:focus': {
+                    outline: 'none',
                   },
                 }}
               />
@@ -153,12 +153,12 @@ export default function FlagTable({
               cursor="pointer"
               transition="all 0.2s ease"
               _hover={{
-                bg: "rgba(0, 242, 255, 0.05)",
-                "& .flag-name": {
-                  color: "brand.primary",
+                bg: 'rgba(0, 242, 255, 0.05)',
+                '& .flag-name': {
+                  color: 'brand.primary',
                 },
-                "& .checkbox": {
-                  borderColor: "rgba(0, 242, 255, 0.5)",
+                '& .checkbox': {
+                  borderColor: 'rgba(0, 242, 255, 0.5)',
                 },
               }}
             >
@@ -180,12 +180,12 @@ export default function FlagTable({
                   cursor="pointer"
                   transition="all 0.2s ease"
                   css={{
-                    "&:checked": {
-                      background: "#00f2ff",
-                      borderColor: "#00f2ff",
+                    '&:checked': {
+                      background: '#00f2ff',
+                      borderColor: '#00f2ff',
                     },
-                    "&:focus": {
-                      outline: "none",
+                    '&:focus': {
+                      outline: 'none',
                     },
                   }}
                 />
@@ -202,12 +202,7 @@ export default function FlagTable({
                   >
                     {flag.name}
                   </Box>
-                  <Box
-                    as="span"
-                    fontFamily="mono"
-                    fontSize="sm"
-                    color="functional.grey3"
-                  >
+                  <Box as="span" fontFamily="mono" fontSize="sm" color="functional.grey3">
                     {flag.key}
                   </Box>
                 </Flex>
@@ -219,7 +214,7 @@ export default function FlagTable({
                 <Toggle
                   checked={flag.active}
                   onChange={(active) => onToggleFlag?.(flag.id, active)}
-                  label={flag.active ? "Active" : "Inactive"}
+                  label={flag.active ? 'Active' : 'Inactive'}
                 />
               </Table.Cell>
               <Table.Cell px="6" py="4">
@@ -263,5 +258,5 @@ export default function FlagTable({
         </Table.Body>
       </Table.Root>
     </Box>
-  );
+  )
 }

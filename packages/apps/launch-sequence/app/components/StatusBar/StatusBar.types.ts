@@ -1,4 +1,4 @@
 export type StatusBarProps = {
-  syncStatus?: "operational" | "syncing" | "error";
-  showKeyboardShortcuts?: boolean;
-};
+  syncStatus?: 'operational' | 'syncing' | 'error'
+  showKeyboardShortcuts?: boolean
+}

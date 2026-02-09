@@ -204,7 +204,9 @@ export async function produceMessages(
   topicName: string,
   messages: MessagePayload[],
 ): Promise<void> {
-  if (messages.length === 0) return
+  if (messages.length === 0) {
+    return
+  }
 
   const state = await getOrCreateProducer(config, clientId)
 
@@ -338,7 +340,9 @@ export async function shutdownProducers(): Promise<void> {
  */
 export function isProducerHealthy(clientId: string): boolean {
   const state = producerPool.get(clientId)
-  if (!state) return false
+  if (!state) {
+    return false
+  }
 
   return state.isConnected && Date.now() - state.lastUsed < IDLE_TIMEOUT
 }

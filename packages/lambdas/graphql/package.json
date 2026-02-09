@@ -1,0 +1,19 @@
+{
+  "name": "@launch-sequence/graphql-lambda",
+  "version": "0.0.1",
+  "description": "GraphQL Lambda function",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "node esbuild.config.js",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "test": "vitest run",
+    "zip": "cd dist && zip -r lambda.zip index.mjs"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.0",
+    "esbuild": "^0.25.0"
+  }
+}
